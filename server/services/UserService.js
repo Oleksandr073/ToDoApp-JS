@@ -1,40 +1,24 @@
-import { readFileSync, writeFileSync } from 'fs';
-import { resolve } from 'path';
 import bcrypt from 'bcrypt';
-
-const databasePath = resolve() + '/db/data.json';
+import UsersRepository from '../repositories/UsersRepository.js';
 
 class UserService {
     async register(body) {
-        let data = readFileSync(databasePath, 'utf8');
-        data = JSON.parse(data);
+        const candidate = UsersRepository.getOne(body);
 
-        const isNewUser = !data.users.find(({ nickname, email }) => body.nickname === nickname || body.email === email);
-
-        if (!isNewUser) {
+        if (candidate) {
             throw new Error('Nickname or email are allready exist');
         }
 
         const hashPassword = await bcrypt.hash(body.password, 3);
         body.password = hashPassword;
 
-        const userId = 'u' + (100 + data.users.length);
-        body.id = userId;
-        body.tasks = [];
+        const user = UsersRepository.create(body);
 
-        data.users.push(body);
-
-        data = JSON.stringify(data);
-        writeFileSync(databasePath, data);
-
-        return body;
+        return user;
     }
 
     async login(body) {
-        let data = readFileSync(databasePath, 'utf8');
-        data = JSON.parse(data);
-
-        const user = data.users.find(({ nickname }) => body.nickname === nickname);
+        const user = UsersRepository.getOne(body);
         if (!user) {
             throw new Error('User with this nickname not found');
         }

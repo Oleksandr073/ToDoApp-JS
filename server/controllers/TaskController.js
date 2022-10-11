@@ -1,12 +1,15 @@
 import TaskService from '../services/TaskService.js';
 
 class TaskController {
-    get(req, res) {
+    getAll(req, res) {
         try {
+            console.log('try');
             const { params: { userId } } = req;
-            const tasks = TaskService.get(userId);
+            const tasks = TaskService.getAll(userId);
+            console.log('tc', tasks);
             res.send(tasks);
         } catch (error) {
+            console.log('error', error);
             res.status(500).json(error.message);
         }
     }

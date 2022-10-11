@@ -1,76 +1,26 @@
-import { readFileSync, writeFileSync } from 'fs';
-import { resolve } from 'path';
-
-const databasePath = resolve() + '/db/data.json';
+import TasksRepository from '../repositories/TasksRepository.js';
 
 class TaskService {
-    get(userId) {
-        let data = readFileSync(databasePath, 'utf8');
-        data = JSON.parse(data);
-
-        let user = data.users.find(({ id }) => id == userId);
-        let tasks = JSON.stringify(user.tasks);
-
+    getAll(userId) {
+        const tasks = TasksRepository.getAll(userId);
+        console.log('ts', tasks);
         return tasks;
     }
 
     create(userId, body) {
-        let data = readFileSync(databasePath, 'utf8');
-        data = JSON.parse(data);
-
-        let user = data.users.find(({ id }) => id === userId);
-
-        let uniqueId = generateUniqueId(body);
-        body.id = uniqueId;
-
-        user.tasks.push(body);
-
-        data = JSON.stringify(data);
-        writeFileSync(databasePath, data);
-
-        return body;
+        const task = TasksRepository.create(userId, body);
+        return task;
     }
 
     update(userId, taskId, body) {
-        let data = readFileSync(databasePath, 'utf8');
-        data = JSON.parse(data);
-
-        let user = data.users.find(({ id }) => id === userId);
-
-        user.tasks = user.tasks.map(task => task.id == taskId ? body : task);
-
-        data = JSON.stringify(data);
-        writeFileSync(databasePath, data);
-
-        return body;
+        const updatedTask = TasksRepository.update(userId, taskId, body);
+        return updatedTask;
     }
 
-    delete(userId, taskId, body) {
-        let data = readFileSync(databasePath, 'utf8');
-        data = JSON.parse(data);
-
-        let user = data.users.find(({ id }) => id === userId);
-
-        user.tasks = user.tasks.filter(task => task.id != taskId);
-
-        data = JSON.stringify(data);
-        writeFileSync(databasePath, data);
-
-        return body;
+    delete(userId, taskId) {
+        const deletedTask = TasksRepository.delete(userId, taskId);
+        return deletedTask;
     }
 }
 
 export default new TaskService();
-
-
-// generate unique id
-function generateUniqueId({ title, text }) {
-    const date = new Date()[Symbol.toPrimitive]('number');
-    const titleLength = title.length;
-    const textLength = text.length;
-
-    const numSum = Number(date.toString() + titleLength.toString() + textLength.toString());
-    const randomDivision = (numSum / (Math.random() * 10)).toFixed();
-
-    return randomDivision.length > 16 ? randomDivision.slice(0, 16) : randomDivision + '0'.repeat(16 - randomDivision.length);
-}
