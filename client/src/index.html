@@ -26,22 +26,51 @@
             <label class="form__label" for="text">Text</label>
             <textarea class="form__text" name="text" type="text" id="text"></textarea>
 
+            <label class="form__label" for="text">Priority</label>
+            <div class="form__priority">
+                <input class="form__range" type="range" name="priority" value="1" min="1" max="3" step="1">
+                <p class="form__range-value">1</p>
+            </div>
+
             <button class="form__button" type="submit">Add task</button>
         </form>
 
         <section class="task">
-            <div class="task__controls">
-                <div class="task__sort-buttons">
-                    <!-- <button class="task__sort-button task__sort-button--active">Sort by active</button> -->
-                    <button class="task__sort-button task__sort-button--date">Sort by date</button>
+           
+            <form class="task__form" name="filter" autocomplete="off">
+
+                <div class="task__controls">
+                    <button class="task__button-filter" type="button">Filters</button>
+
+                    <label class="task__search-label" for="search">Search</label>
+                    <input class="task__search-input" type="search" name="search" id="search">
+                    <button type="submit">Search tasks</button>
                 </div>
 
-                <form class="task__search-form">
-                    <label class="task__search-label" for="search">Search</label>
-                    <input class="task__search-input" type="search" name="" id="search">
-                    <!-- <button type="submit"></button> -->
-                </form>
-            </div>
+                <div class="task__filter task__filter--hide">
+                    <select name="active-filter">
+                        <option value="all" selected>All tasks</option>
+                        <option value="active">Active tasks</option>
+                        <option value="inactive">Inactive tasks</option>
+                    </select>
+                    <select name="date-filter">
+                        <option value="new-first" selected>New-first tasks</option>
+                        <option value="old-first">Old-first tasks</option>
+                    </select>
+                    <div>
+                        <input type="datetime-local" name="date-range-from">
+                        <input type="datetime-local" name="date-range-to">
+                    </div>
+                    Priority
+                    <select name="priority">
+                        <option value="none">-</option>
+                        <option value="ask">ask</option> <!-- зростання -->
+                        <option value="desk">desc</option> <!-- спадання -->
+                    </select>
+                    
+                    <button type="submit">Show tasks</button>
+                </div>
+            </form>
             <!-- sort buttons -->
             <ul class="task__list">
             </ul>

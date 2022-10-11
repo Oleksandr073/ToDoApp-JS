@@ -1,38 +1,44 @@
-import Api from "../helpers/Api.js";
+import TasksApi from "../helpers/TasksApi.js";
 
 export default class Task {
-    constructor({ title, text, isActive = true, date = new Date(), id }) {
+    constructor({ title, text, priority, isActive = true, date = new Date(), id }) {
         this.title = title;
         this.text = text;
+        this.priority = priority;
         this.isActive = isActive;
-        this.id = id;
         this.date = date;
+        this.id = id;        
     }
 
-    deleteTaskInTaskList(id) {
-        
+    deleteTaskInTaskList = id => {
+        Task.TaskList.allTasks = Task.TaskList.allTasks.filter(task => task.id !== id);
+        Task.TaskList.filteredTasks = Task.TaskList.allTasks;
+    };
+
+    updateTaskInTaskList = (id, newData) => {
+        Task.TaskList.allTasks = Task.TaskList.allTasks.map(task => task.id === id ? newData : task);
+        Task.TaskList.filteredTasks = Task.TaskList.allTasks;
+    };
+
+    postTaskInTaskList = data => {
+        Task.TaskList.allTasks.push(data);
+
+        Task.TaskList.renderTasks();
     }
 
-    updateTaskInTaskList(id, newData) {
-
-    }
-
-    postTaskInTaskList(data) {
-
-    }
-
-    postTask() { // post request
+    async postTask() { // post request
         const userId = localStorage.getItem('userId');
-        return Api.postData(userId, this)
+        return await TasksApi.postData(userId, this)
             .then(({ id }) => {
                 this.id = id;
+
                 this.postTaskInTaskList(this);
             });
     }
 
-    deleteTask() { // delete request
+    async deleteTask() { // delete request
         const userId = localStorage.getItem('userId');
-        Api.deleteData(userId, this.id)
+        return await TasksApi.deleteData(userId, this.id)
         .then(() => {
             const taskElement = document.querySelector(`[data-task-id="${this.id}"]`);
             taskElement.remove();
@@ -41,9 +47,9 @@ export default class Task {
         });
     }
 
-    updateTask() { // put request
+    async updateTask() { // put request
         const userId = localStorage.getItem('userId');
-        Api.updateData(userId, this.id, this)
+        return await TasksApi.updateData(userId, this.id, this)
         .then(() => {
             const taskElement = document.querySelector(`[data-task-id="${this.id}"]`);
             const editedTaskElement = this.createTaskElement();
@@ -54,9 +60,10 @@ export default class Task {
         });
     }
 
-    editTask(editedTitle, editedText) {
+    editTask({ editedTitle, editedText, editedPriority }) {
         this.title = editedTitle;
         this.text = editedText;
+        this.priority = editedPriority;
 
         this.updateTask();
     }
@@ -74,7 +81,7 @@ export default class Task {
 
         const options = {
             year: 'numeric', month: 'numeric', day: 'numeric',
-            hour: 'numeric', minute: 'numeric', second: 'numeric',
+            hour: 'numeric', minute: 'numeric',
             hour12: false
         };
 
@@ -88,6 +95,7 @@ export default class Task {
             <div class="task__meta">
                 <h3 class="task__title">${this.title}</h3>
                 <p class="task__text">${this.text}</p>
+                <p class="task__priority">Priority: <span>${this.priority}</span></p>
                 <time class="task__date">${new Date(this.date).toLocaleString('en-US', options)}</time>
             </div>
             <div class="task__buttons">
@@ -119,10 +127,22 @@ export default class Task {
             editForm.innerHTML = `
             <form>
                 <input type="text" name="title" value="${this.title}">
-                <input type="text" name="text" value="${this.text}">
+                <textarea type="text" name="text">${this.text}</textarea>
+                <div class="priority">
+                    <input type="range" name="priority" value="${this.priority}" min="1" max="3" step="1">
+                    <p>Priority: <span>${this.priority}</span></p>
+                </div>
                 <button type="submit">Edit task</button>
                 <button type="button">Cancel edit</button>
             </form>`;
+
+            const priority = editForm.querySelector('.priority');
+            const inputRange = priority.querySelector('input');
+            const p = priority.querySelector('span');
+
+            inputRange.addEventListener('change', event => {
+                p.textContent = event.currentTarget.value;
+            })
 
             const title = editForm.querySelector('[name="title"]');
             const text = editForm.querySelector('[name="text"]');
@@ -130,7 +150,11 @@ export default class Task {
             editForm.addEventListener('submit', event => {
                 event.preventDefault();
 
-                this.editTask(title.value, text.value);
+                this.editTask({
+                    editedTitle: title.value,
+                    editedText: text.value,
+                    editedPriority: Number(inputRange.value),
+                });
             })
 
             const taskMeta = taskElement.querySelector('.task__meta');

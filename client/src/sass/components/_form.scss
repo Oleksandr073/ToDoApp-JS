@@ -38,6 +38,27 @@
         border-radius: 10px;
     }
 
+    // .form__priority
+
+    &__priority {
+        display: flex;
+        margin-bottom: 20px;
+    }
+
+    // .form__range
+
+    &__range {
+        margin-right: 10px;
+        
+        cursor: pointer;
+    }
+
+    // .form__range-value 
+
+    &__range-value {
+
+    }
+
     // .form__button
 
     &__button {

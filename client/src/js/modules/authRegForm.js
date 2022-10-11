@@ -1,7 +1,7 @@
-import UserApi from "../helpers/UserApi";
+import UsersApi from "../helpers/UsersApi";
 import modal from "./modal";
 
-import TaskList from "./TaskList";
+import tasklist from "./TaskList";
 
 export default function authRegForm() {
     const formsHTML = {
@@ -35,19 +35,14 @@ export default function authRegForm() {
                 form.addEventListener('submit', (event) => {
                     event.preventDefault();
 
-                    console.log('register');
-
                     const formData = new FormData(event.currentTarget)
                     const registerInfo = {};
                     formData.forEach((value, name) => registerInfo[name] = value);
 
                     if (registerInfo['password'] == registerInfo['repeat-password']) {
                         registerInfo['repeat-password'] = undefined;
-                        UserApi.registerUser(registerInfo)
+                        UsersApi.registerUser(registerInfo)
                         .then(response => {
-                            console.log(response);
-                            console.log('register succesfull');
-
                             localStorage.setItem('userId', response.id);
                             form.reset();
                             logout();
@@ -83,18 +78,12 @@ export default function authRegForm() {
                 form.addEventListener('submit', (event) => {
                     event.preventDefault();
 
-                    console.log('login');
-
-                    const formData = new FormData(event.currentTarget)
+                    const formData = new FormData(event.currentTarget);
                     const loginInfo = {};
                     formData.forEach((value, name) => loginInfo[name] = value);
-                    console.log('form', loginInfo);
-                    // const userId = localStorage.getItem('userId', response.userId);
-                    UserApi.loginUser(loginInfo)
-                    .then(response => {
-                        console.log(response);
-                        console.log('login succesfull');
 
+                    UsersApi.loginUser(loginInfo)
+                    .then(response => {
                         localStorage.setItem('userId', response.id);
 
                         form.reset();
@@ -158,13 +147,7 @@ export default function authRegForm() {
     function logout() {
         const userId = localStorage.getItem('userId');
 
-        const tasks = new TaskList();
-        tasks.getAllTasks(userId)
-        .then(() => {
-            tasks.renderTasks('.task__list');
-        });
-
-
+        tasklist.getAllTasks(userId);
         
         headerButtonsWrapper.innerHTML = `
         <button class="header__button header__button--logout" type="button" data-mode="logout">Log out</button>`;
