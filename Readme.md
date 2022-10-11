@@ -67,15 +67,15 @@ $ npm i
 $ cd ..
 ```
 
-To rename `example.env` to `.env`, run:
+To create `.env`, run:
 
 ```sh
 $ cd server
-$ mv example.env .env
+$ cp example.env .env
 $ cd ..
 ```
 
-This task will rename `example.env` to `.env` inside your local `server` folder
+This task will copy `example.env` as `.env` inside your local `server` folder
 
 ## Usage
 
