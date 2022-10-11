@@ -12,11 +12,7 @@
 
 <img align="left" alt="Babel" width="32px" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/babel/babel.png"/>
 
-<img align="left" alt="Node.js" width="35px" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/nodejs/nodejs.png"/>
-
-<img alt="express.js" height="35px" src="hhttps://i.cloudup.com/zfY6lL7eFa-3000x3000.png"/>
-
-<br>
+<img alt="Node.js" width="35px" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/nodejs/nodejs.png"/>
 
 ## Prerequisites
 
