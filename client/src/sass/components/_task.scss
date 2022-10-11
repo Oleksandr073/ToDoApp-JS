@@ -1,0 +1,142 @@
+.task {
+
+    //.task__list
+
+    &__list {
+
+    }
+
+    // .task__item
+
+    &__item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+
+        border: 2px solid #000000;
+        border-radius: 5px;
+
+        &:not(:last-child) {
+            margin-bottom: 30px;
+        }
+    }
+
+    // .task__check
+
+    &__check {
+        // display: inline-block;
+        flex-shrink: 0;
+        width: 50px;
+        height: 50px;
+        margin-right: 20px;
+
+        cursor: pointer;
+
+        border: 2px solid #000000;
+        border-radius: 5px;
+
+        background-color: #ffffff;
+
+        position: relative;
+    }
+
+    // .task__check-box
+
+    &__check-box {
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        border: 0;
+        padding: 0;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        margin: -1px;
+    }
+    
+    // .task__check-icon {
+
+    &__check-icon {
+        width: 35px;
+        height: 35px;
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 1;
+
+        transform: translate(-50%, -50%);
+
+        opacity: 0;
+
+        transition: opacity 200ms ease;
+
+        .task__check-box:checked + & {
+            opacity: 1;
+        }
+    }
+
+    // .task__meta
+
+    &__meta {
+        // width: 50%;
+        margin-right: 15px;
+
+        flex-grow: 1;
+    }
+
+    // .task__title
+
+    &__title {
+        margin-bottom: 10px;
+    }
+
+    // .task__text
+
+    &__text {
+        margin-bottom: 20px;
+    }
+
+    // .task__date
+
+    &__date {}
+
+    // .task__buttons
+
+    &__buttons {
+        display: flex;
+    }
+
+    // .task__button
+
+    &__button {
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        background: none;
+
+        width: 30px;
+        height: 30px;
+
+        &:not(:last-child) {
+            margin-right: 15px;
+        }
+
+        // .task__button--edit
+
+        &--edit {}
+
+        // .task__button--delete
+
+        &--delete {}
+    }
+
+    // .task__button-icon
+
+    &__button-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+}

@@ -1,0 +1,9 @@
+cache
+
+node_modules
+
+.vscode
+
+public
+
+authWithEmailAndPassword.js
