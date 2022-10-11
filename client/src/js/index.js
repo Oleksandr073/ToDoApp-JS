@@ -43,8 +43,8 @@ form.addEventListener('submit', function(event) {
 
     form.reset();
 
-    console.log(tasks.allTasks);
-    tasks.allTasks.unshift(newTask);
-    console.log(tasks.allTasks);
+    // console.log(tasks.allTasks);
+    // tasks.allTasks.unshift(newTask);
+    // console.log(tasks.allTasks);
 
 });

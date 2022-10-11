@@ -73,19 +73,19 @@ export default class TaskList {
                     id
                 });
 
-                this.allTasks.push(task);
+                // this.allTasks.push(task);
 
-                task.deleteTaskInTaskList = id => {
-                    this.allTasks = this.allTasks.filter(task => task.id !== id);
-                };
+                // task.deleteTaskInTaskList = id => {
+                //     this.allTasks = this.allTasks.filter(task => task.id !== id);
+                // };
 
-                task.updateTaskInTaskList = (id, newData) => {
-                    this.allTasks = this.allTasks.map(task => task.id === id ? newData : task);
-                }; 
+                // task.updateTaskInTaskList = (id, newData) => {
+                //     this.allTasks = this.allTasks.map(task => task.id === id ? newData : task);
+                // }; 
 
-                task.postTaskInTaskList = data => {
-                    this.allTasks.push(data);
-                };
+                // task.postTaskInTaskList = data => {
+                //     this.allTasks.push(data);
+                // };
             }
         }
     }

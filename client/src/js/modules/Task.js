@@ -1,4 +1,6 @@
 export default class Task {
+    static allTasks = [];
+
     constructor({ title, text, isActive = true, date, id }) {
         this.title = title;
         this.text = text;
@@ -8,15 +10,21 @@ export default class Task {
     }
 
     deleteTaskInTaskList(id) {
-        
+        console.log(Task.allTasks);
+        Task.allTasks = Task.allTasks.filter(task => task.id !== id);
+        console.log(Task.allTasks);
     }
 
     updateTaskInTaskList(id, newData) {
-
+        console.log(Task.allTasks);
+        Task.allTasks = Task.allTasks.map(task => task.id === id ? newData : task);
+        console.log(Task.allTasks);
     }
 
     postTaskInTaskList(data) {
-
+        console.log(Task.allTasks);
+        Task.allTasks.push(data);
+        console.log(Task.allTasks);
     }
 
     getTaskInfo() {
@@ -43,13 +51,11 @@ export default class Task {
 
         const taskElement = document.querySelector(`[data-task-id="${this.id}"]`);
         taskElement.remove();
-
+        console.log('delete 1');
         this.deleteTaskInTaskList(this.id);
     }
 
     updateTask() {
-        
-
         localStorage.setItem(`${this.id}`, JSON.stringify(this.getTaskInfo()));
 
         const taskElement = document.querySelector(`[data-task-id="${this.id}"]`);
