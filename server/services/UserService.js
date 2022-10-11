@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import ApiError from '../exceptions/ApiError.js';
+import ApiError from '../helpers/ApiError.js';
 import UsersRepository from '../repositories/UsersRepository.js';
 import TokenService from './TokenService.js';
 
