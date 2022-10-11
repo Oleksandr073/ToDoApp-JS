@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import TaskController from '../controllers/TaskController.js';
+import authMiddleware from '../middlewares/authMiddleware.js';
 
 const tasksRouter = Router();
 
-tasksRouter.get("/:userId", TaskController.getAll);
-tasksRouter.post("/:userId", TaskController.create)
-tasksRouter.put("/:userId/:taskId", TaskController.update)
-tasksRouter.delete("/:userId/:taskId", TaskController.delete)
+tasksRouter.get("/", authMiddleware, TaskController.getAll);
+tasksRouter.post("/", authMiddleware, TaskController.create);
+tasksRouter.put("/:taskId", authMiddleware, TaskController.update);
+tasksRouter.delete("/:taskId", authMiddleware, TaskController.delete);
 
 export default tasksRouter;

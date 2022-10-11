@@ -1,46 +1,46 @@
 import TaskService from '../services/TaskService.js';
 
 class TaskController {
-    getAll(req, res) {
+    getAll(req, res, next) {
         try {
-            console.log('try');
-            const { params: { userId } } = req;
+            const userId = req.user.id;
             const tasks = TaskService.getAll(userId);
-            console.log('tc', tasks);
             res.send(tasks);
         } catch (error) {
-            console.log('error', error);
-            res.status(500).json(error.message);
+            next(error);
         }
     }
 
-    create(req, res) {
+    create(req, res, next) {
         try {
-            const { body, params: { userId } } = req;
+            const userId = req.user.id;
+            const { body } = req;
             const task = TaskService.create(userId, body);
             res.send(task);
         } catch (error) {
-            res.status(500).json(error.message);
+            next(error);
         }
     }
 
-    update(req, res) {
+    update(req, res, next) {
         try {
-            const { body, params: { userId, taskId } } = req;
+            const userId = req.user.id;
+            const { body, params: { taskId } } = req;
             const task = TaskService.update(userId, taskId, body);
             res.send(task);
         } catch (error) {
-            res.status(500).json(error.message);
+            next(error);
         }
     }
 
-    delete(req, res) {
+    delete(req, res, next) {
         try {
-            const { body, params: { userId, taskId } } = req;
+            const userId = req.user.id;
+            const { body, params: { taskId } } = req;
             const task = TaskService.delete(userId, taskId, body);
             res.send(task);
         } catch (error) {
-            res.status(500).json(error.message);
+            next(error);
         }
     }
 }

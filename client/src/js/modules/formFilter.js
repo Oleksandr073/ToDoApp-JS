@@ -18,13 +18,17 @@ export default function formFilter() {
     const dateFromElement = form.querySelector('[name="date-range-from"]');
     const dateToElement = form.querySelector('[name="date-range-to"]');
 
-    dateFromElement.min = dateFromValue;
-    dateFromElement.max = getDate(new Date());
-    dateFromElement.value = dateFromElement.min;
+    setCurrentTime();
 
-    dateToElement.min = dateFromValue;
-    dateToElement.max = getDate(new Date());
-    dateToElement.value = dateToElement.max;
+    function setCurrentTime() {
+        dateFromElement.min = dateFromValue;
+        dateFromElement.max = getDate(new Date());
+        dateFromElement.value = dateFromElement.min;
+
+        dateToElement.min = dateFromValue;
+        dateToElement.max = getDate(new Date());
+        dateToElement.value = dateToElement.max;
+    }
 
     function getDate(date) {
         let year = date.getFullYear();
@@ -51,8 +55,9 @@ export default function formFilter() {
     form.addEventListener('submit', event => {
         event.preventDefault();
 
+        setCurrentTime(); //------------//
         const filterInfo = getFormDataHelper(event.currentTarget);
-
+        
         tasklist.getFilteredTasks(filterInfo);
     })
 

@@ -33,6 +33,7 @@ export default class BaseRepository {
             const searchItemInData = data.find(item => item[key] === search[key]);
             if (searchItemInData) {
                 searchItem = searchItemInData;
+                break;
             }
         }
 
@@ -54,7 +55,8 @@ export default class BaseRepository {
     async update(id, dataToUpdate) {
         const data = this.getDataFromDatabase();
 
-        const updatedItemIndex = data.findIndex(item => item.id === id)
+        const updatedItemIndex = data.findIndex(item => item.id === id);
+
         if (updatedItemIndex === -1) {
             return null;
         }

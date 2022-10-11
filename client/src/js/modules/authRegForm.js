@@ -1,4 +1,6 @@
+import { ACCESS_TOKEN_KEY } from '../constants/localStorageKeys';
 import getFormDataHelper from '../helpers/getFormDataHelper';
+import localStorageHelper from '../helpers/localStorageHelper';
 import { userApi } from '../requests/usersRequest';
 import modal from './modal';
 
@@ -46,7 +48,6 @@ export default function authRegForm() {
                         registerInfo['repeat-password'] = undefined;
                         const { id } = await userApi.registerUser(registerInfo)
 
-                        localStorage.setItem('userId', id);
                         form.reset();
                         document.querySelector('.modal').classList.remove('modal--open');
                         logout();
@@ -86,7 +87,6 @@ export default function authRegForm() {
 
                     try {
                         const { id } = await userApi.loginUser(loginInfo)
-                        localStorage.setItem('userId', id);
 
                         form.reset();
                         document.querySelector('.modal').classList.remove('modal--open');
@@ -102,11 +102,11 @@ export default function authRegForm() {
     }
 
 
-    const userId = localStorage.getItem('userId');
+    const token = localStorageHelper.get(ACCESS_TOKEN_KEY);
 
     const headerButtonsWrapper = document.querySelector('.header__buttons');
 
-    if (!userId) {
+    if (!token) {
         loginRegister();
     } else {
         logout();
@@ -150,17 +150,17 @@ export default function authRegForm() {
     }
 
     function logout() {
-        const userId = localStorage.getItem('userId');
+        const token = localStorageHelper.get(ACCESS_TOKEN_KEY);
 
-        tasklist.getTasks(userId);
+        tasklist.getTasks(token);
         
         headerButtonsWrapper.innerHTML = `
         <button class="header__button header__button--logout" type="button" data-mode="logout">Log out</button>`;
 
         const logoutButton = headerButtonsWrapper.querySelector('.header__button--logout');
 
-        logoutButton.addEventListener('click', () => {
-            localStorage.clear('userId');
+        logoutButton.addEventListener('click', async () => {
+            await userApi.logoutUser();
 
             document.querySelector('.task__list').innerHTML = '';
 

@@ -18,10 +18,10 @@ export default function form() {
         const newTask = new Task(postInfo);
 
         newTask.postTask()
-            .then(() => {
-                form.reset();
-                p.textContent = 1;
-            });
+        .then(() => {
+            form.reset();
+            p.textContent = 1;
+        });
 
     });
 }

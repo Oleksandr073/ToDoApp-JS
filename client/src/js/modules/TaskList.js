@@ -18,6 +18,7 @@ class TaskList {
         arr = arr.filter(({ date }) => new Date(date) >= new Date(dateFrom) && new Date(date) <= new Date(dateTo));
         
         // activeFilter
+        
         arr = arr.filter(({ isActive }) => {
             if (activeFilter == 'active') return !isActive;
             if (activeFilter == 'inactive') return isActive;
@@ -61,11 +62,11 @@ class TaskList {
         this.filteredTasks = this.allTasks;
     }
 
-    async getTasks(userId) {
+    async getTasks() {
         try {
             this.allTasks.length = 0;
 
-            const tasks = await taskApi.getTasks(userId)
+            const tasks = await taskApi.getTasks()
             tasks.forEach(el => {
                 const task = new Task(el);
                 this.allTasks.push(task);

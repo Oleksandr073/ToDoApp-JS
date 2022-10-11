@@ -2,21 +2,21 @@ import tasklist from './TaskList';
 import { taskApi } from '../requests/tasksRequest';
 
 export default class Task {
-    constructor({ title, text, priority, isActive = true, date = new Date(), id }) {
+    constructor({ title, text, priority, isActive = true, date = new Date().toJSON().replace(/:\d\d\..+$/, '') + 'Z', id }) {
         this.title = title;
         this.text = text;
         this.priority = priority;
         this.isActive = isActive;
         this.date = date;
-        this.id = id;        
+        this.id = id;
     }
 
     async postTask() { // post request
         try {
-            const userId = localStorage.getItem('userId');
-            const { id } = await taskApi.createTask(userId, this);
+            const { id } = await taskApi.createTask(this);
 
             this.id = id;
+
             tasklist.postTaskInTaskList(this);
         } catch (error) {
             alert(error);
@@ -25,8 +25,7 @@ export default class Task {
 
     async deleteTask() { // delete request
         try {
-            const userId = localStorage.getItem('userId');
-            await taskApi.deleteTask(userId, this.id);
+            await taskApi.deleteTask(this.id);
 
             const taskElement = document.querySelector(`[data-task-id="${this.id}"]`);
             taskElement.remove();
@@ -39,8 +38,7 @@ export default class Task {
 
     async updateTask() { // put request
         try {
-            const userId = localStorage.getItem('userId');
-            await taskApi.updateTask(userId, this.id, this);
+            await taskApi.updateTask(this.id, this);
 
             const taskElement = document.querySelector(`[data-task-id="${this.id}"]`);
             const editedTaskElement = this.createTaskElement();

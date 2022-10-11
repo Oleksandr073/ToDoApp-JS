@@ -34,6 +34,10 @@ class TasksRepository extends BaseRepository {
     update(userId, taskId, body) {
         const userTasks = super.getOne({ id: userId });
 
+        if (!userTasks) {
+            return null;
+        }
+
         const updatedTask = {
             ...userTasks.tasks.find(task => task.id === taskId),
             ...body
@@ -51,7 +55,11 @@ class TasksRepository extends BaseRepository {
 
         const deletedTask = userTasks.tasks.find(task => task.id === taskId);
 
-        userTasks.tasks = userTasks.tasks.filter(task => task.id === taskId);
+        if (!deletedTask) {
+            return null;
+        }
+
+        userTasks.tasks = userTasks.tasks.filter(task => task.id !== taskId);
 
         super.update(userId, userTasks);
 
