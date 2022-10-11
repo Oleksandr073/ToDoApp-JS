@@ -2,12 +2,13 @@ import Api from "../helpers/Api.js";
 import Task from "./Task.js";
 
 export default class TaskList {
-    constructor(taskListSelector) {
+    constructor() {
         this.allTasks = [];
+        this.filteredTasks = this.allTasks;
     }
 
-    consoleAllTasks() {
-        console.log(this.allTasks);
+    searchTasks(searchText) {
+        this.filteredTasks = this.allTasks.filter(({ title, text }) => title.includes(searchText) || text.includes(searchText));
     }
 
     deleteTask(index) {
@@ -16,47 +17,36 @@ export default class TaskList {
 
     renderTasks(taskListSelector) {
         const taskListElement = document.querySelector(taskListSelector);
+        taskListElement.innerHTML = '';
 
-        this.allTasks.forEach(task => {
+        this.filteredTasks.forEach(task => {
             const taskElement = task.createTaskElement();
             taskListElement.prepend(taskElement);
         });
     }
 
-    async getAllTasks() {
-        return await Api.getData()
-            .then(response => {
-            console.log('ffffffffffffff', response);
+    async getAllTasks(userId) {
+        return await Api.getData(userId)
+            .then(tasks => tasks.map(el => {
 
-            const tasks = Object.keys(response).map(key => {
-                const task = new Task({
-                    ...response[key],
-                    // ...response[key][Object.keys(response[key])[0]],
-                    id: key
-                });
+                const task = new Task(el);
 
                 this.allTasks.push(task);
 
                 task.deleteTaskInTaskList = id => {
-                    console.log(this.allTasks);
                     this.allTasks = this.allTasks.filter(task => task.id !== id);
-                    console.log(this.allTasks);
                 };
 
                 task.updateTaskInTaskList = (id, newData) => {
-                    // console.log(this.allTasks);
-                    // this.allTasks = this.allTasks.map(task => task.id === id ? newData : task);
-                    // console.log(this.allTasks);
+                    this.allTasks = this.allTasks.map(task => task.id === id ? newData : task);
                 }; 
 
-                task.postTaskInTaskList =() => {
-                    
-                };
+                task.postTaskInTaskList = data => {
+                    tasks.allTasks.unshift(data);
+                }
 
                 return task;
             })
-
-            return tasks;
-        });
+        );
     }
 }

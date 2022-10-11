@@ -1,32 +1,25 @@
-const FIREBASE_URL = 'https://todoapp1-7482c-default-rtdb.europe-west1.firebasedatabase.app/';
+const BASE_URL = 'data';
 
-const ENDPOINT = 'todoitems';
-
-class Api {
-    // constructor(endpoint) {
-    //     this.endpoint = endpoint;
-    // }
+export default class Api {
 
     // GET
-    static async getData() {
-
-        const url = FIREBASE_URL + ENDPOINT + '.json';
+    static async getData(userId) {
+        const url = BASE_URL + '/' + userId;
         const options = {
             method: 'GET'
         };
 
         return await fetch(url, options)
             .then(response => response.ok ? response.json() : Promise.reject(Error('Failed to get data')))
-            .then(response => response ? response : Promise.reject(Error('No data')))
+            .then(response => response.length ? response : Promise.reject(Error('No data')))
             .catch(error => { throw error });
     }
 
     // POST
-    static async postData(id, data) {
-
-        const url = FIREBASE_URL + ENDPOINT + '/' + id + '.json';
+    static async postData(userId, data) {
+        const url = BASE_URL + '/' + userId;
         const options = {
-            method: 'PATCH',
+            method: 'POST',
             body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json'
@@ -40,9 +33,8 @@ class Api {
 
 
     // DELETE
-    static async deleteData(id) {
-
-        const url = FIREBASE_URL + ENDPOINT + '/' + id + '.json';
+    static async deleteData(userId, id) {
+        const url = BASE_URL + '/' + userId + '/' + id;
         const options = {
             method: 'DELETE'
         };
@@ -52,12 +44,11 @@ class Api {
             .catch(error => { throw error });
     }
 
-    // PATCH
-    static async updateData(id, data) {
-
-        const url = FIREBASE_URL + ENDPOINT + '/' + id + '.json';
+    // PUT
+    static async updateData(userId, id, data) {
+        const url = BASE_URL + '/' + userId + '/' + id;
         const options = {
-            method: 'PATCH',
+            method: 'PUT',
             body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json'
@@ -69,5 +60,3 @@ class Api {
             .catch(error => { throw error });
     }
 }
-
-export default Api;

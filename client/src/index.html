@@ -8,25 +8,61 @@
 </head>
 <body>
 
+<header class="header">
+    <div class="header__container container">
+        <div class="header__buttons">
+            <button class="header__button header__button--login" type="button" data-mode="login">Log in</button>
+            <button class="header__button header__button--register" type="button" data-mode="register">Register</button>
+        </div>
+    </div>
+</header>
+
 <main class="main">
     <div class="main__container container">
         <form class="form">
             <label class="form__label" for="title">Title</label>
-            <input class="form__title" type="text" id="title">
+            <input class="form__title" name="title" type="text" id="title">
 
             <label class="form__label" for="text">Text</label>
-            <textarea class="form__text" type="text" id="text"></textarea>
+            <textarea class="form__text" name="text" type="text" id="text"></textarea>
 
             <button class="form__button" type="submit">Add task</button>
         </form>
 
         <section class="task">
+            <div class="task__controls">
+                <div class="task__sort-buttons">
+                    <!-- <button class="task__sort-button task__sort-button--active">Sort by active</button> -->
+                    <button class="task__sort-button task__sort-button--date">Sort by date</button>
+                </div>
+
+                <form class="task__search-form">
+                    <label class="task__search-label" for="search">Search</label>
+                    <input class="task__search-input" type="search" name="" id="search">
+                    <!-- <button type="submit"></button> -->
+                </form>
+            </div>
             <!-- sort buttons -->
             <ul class="task__list">
             </ul>
         </section>
     </div>
 </main>
+
+<div class="modal">
+    <div class="modal__wrapper">
+        <div class="modal__tabs">
+            <div class="modal__tab">
+                <input class="modal__radio" id="login" type="radio" name="tab" data-mode="login">
+                <label class="modal__label" for="login">Log in</label>
+            </div>
+            <div class="modal__tab">
+                <input class="modal__radio" id="register" type="radio" name="tab" data-mode="register">
+                <label class="modal__label" for="register">Register</label>
+            </div>
+        </div>
+    </div>
+</div>
     
 
 </body>

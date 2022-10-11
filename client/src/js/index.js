@@ -1,104 +1,51 @@
 import '../sass/style.scss';
-// import Api from "./helpers/Api.js";
 import Task from "./modules/Task.js";
 import TaskList from "./modules/TaskList.js";
+// import modal from './modules/modal';
+import authRegForm from './modules/authRegForm';
 
-// const api = new Api('todoitems');
+// modal();
+authRegForm();
 
-const tasks = new TaskList();
-tasks.getAllTasks()
-.then(() => {
-    tasks.renderTasks('.task__list');
-});
-
-tasks.consoleAllTasks();
-
-
-
-const parentElement = document.querySelector('.task__list');
-
-// Task.instances = [];
-
-// api.getData()
-// .then(response => {
-
-//     const tasks = Object.keys(response).map(key => {
-//         return {
-//             ...response[key],
-//             id: key
-//         }
-//     })
-
-//     tasks.forEach(task => {
-//         const gettedTask = new Task(task);
-//         const gettedTaskElement = gettedTask.createTaskElement();
-
-//         parentElement.prepend(gettedTaskElement);
-//     });
+// get and render all tasks
+// const tasks = new TaskList();
+// tasks.getAllTasks()
+// .then(() => {
+//     tasks.renderTasks('.task__list');
 // });
 
-// console.log(Task.instances);
-
-// task
-
-// const task = new Task({
-//     title: 'title123',
-//     text: 'any text',
-//     isActive: true,
-// });
-// const taskCard = task.createTaskElement();
-
-// parentElement.prepend(taskCard);
-
-// task.editTask('new title', 'new text');
 
 // form 
 const form = document.querySelector('.form');
-const title = form.querySelector('.form__title');
-const text = form.querySelector('.form__text');
-
-// form.addEventListener('submit', (event) => {
-//     event.preventDefault();
-
-//     task.editTask(title.value, text.value);
-// })
+const parentElement = document.querySelector('.task__list');
 
 form.addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const postInfo = {
-        title: title.value,
-        text: text.value
-    }
-
-    postInfo.id = generateUniqueId(postInfo);
+    const formData = new FormData(event.currentTarget)
+    const postInfo = {};
+    formData.forEach((value, name) => postInfo[name] = value);
     
     const newTask = new Task(postInfo);
     
-
     newTask.postTask()
-    .then(() => {
+        .then(() => {
+
         const newTaskElement = newTask.createTaskElement();
         parentElement.prepend(newTaskElement);
 
         form.reset();
-
-        console.log(tasks.allTasks);
-        tasks.allTasks.unshift(newTask);
-        console.log(tasks.allTasks);
     });
 
 });
 
 
-// generate unique id
-function generateUniqueId({title, text}) {
-    const date = new Date()[Symbol.toPrimitive]('number');
-    const titleLength = title.length;
-    const textLength = text.length;
+// search form
+const searchInput = document.querySelector('.task__search-input');
 
-    const numSum = Number(date.toString() + titleLength.toString() + textLength.toString());
-    const randomDivision = (numSum / (Math.random() * 10)).toFixed();
+searchInput.addEventListener('input', event => {
+    console.log(event.target.value.trim());
+    tasks.searchTasks(event.target.value.trim());
+    tasks.renderTasks('.task__list');
+})
 
-    return randomDivision.length > 16 ? randomDivision.slice(0, 16) : randomDivision + '0'.repeat(16 - randomDivision.length);
-}
