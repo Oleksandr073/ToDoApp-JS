@@ -1,7 +1,7 @@
-import UsersApi from "../helpers/UsersApi";
-import modal from "./modal";
+import { registerUser, loginUser } from '../requests/usersRequest';
+import modal from './modal';
 
-import tasklist from "./TaskList";
+import tasklist from './TaskList';
 
 export default function authRegForm() {
     const formsHTML = {
@@ -41,7 +41,7 @@ export default function authRegForm() {
 
                     if (registerInfo['password'] == registerInfo['repeat-password']) {
                         registerInfo['repeat-password'] = undefined;
-                        UsersApi.registerUser(registerInfo)
+                        registerUser(registerInfo)
                         .then(response => {
                             localStorage.setItem('userId', response.id);
                             form.reset();
@@ -82,7 +82,7 @@ export default function authRegForm() {
                     const loginInfo = {};
                     formData.forEach((value, name) => loginInfo[name] = value);
 
-                    UsersApi.loginUser(loginInfo)
+                    loginUser(loginInfo)
                     .then(response => {
                         localStorage.setItem('userId', response.id);
 
@@ -147,14 +147,14 @@ export default function authRegForm() {
     function logout() {
         const userId = localStorage.getItem('userId');
 
-        tasklist.getAllTasks(userId);
+        tasklist.getTasks(userId);
         
         headerButtonsWrapper.innerHTML = `
         <button class="header__button header__button--logout" type="button" data-mode="logout">Log out</button>`;
 
         const logoutButton = headerButtonsWrapper.querySelector('.header__button--logout');
 
-        logoutButton.addEventListener('click', event => {
+        logoutButton.addEventListener('click', () => {
             localStorage.clear('userId');
 
             document.querySelector('.task__list').innerHTML = '';

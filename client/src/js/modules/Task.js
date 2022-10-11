@@ -1,4 +1,5 @@
-import TasksApi from "../helpers/TasksApi.js";
+import tasklist from './TaskList';
+import { postTaskReq, putTaskReq, deleteTaskReq } from '../requests/tasksRequest';
 
 export default class Task {
     constructor({ title, text, priority, isActive = true, date = new Date(), id }) {
@@ -10,54 +11,38 @@ export default class Task {
         this.id = id;        
     }
 
-    deleteTaskInTaskList = id => {
-        Task.TaskList.allTasks = Task.TaskList.allTasks.filter(task => task.id !== id);
-        Task.TaskList.filteredTasks = Task.TaskList.allTasks;
-    };
-
-    updateTaskInTaskList = (id, newData) => {
-        Task.TaskList.allTasks = Task.TaskList.allTasks.map(task => task.id === id ? newData : task);
-        Task.TaskList.filteredTasks = Task.TaskList.allTasks;
-    };
-
-    postTaskInTaskList = data => {
-        Task.TaskList.allTasks.push(data);
-
-        Task.TaskList.renderTasks();
-    }
-
     async postTask() { // post request
         const userId = localStorage.getItem('userId');
-        return await TasksApi.postData(userId, this)
+        return await postTaskReq(userId, this)
             .then(({ id }) => {
                 this.id = id;
 
-                this.postTaskInTaskList(this);
+                tasklist.postTaskInTaskList(this);
             });
     }
 
     async deleteTask() { // delete request
         const userId = localStorage.getItem('userId');
-        return await TasksApi.deleteData(userId, this.id)
-        .then(() => {
-            const taskElement = document.querySelector(`[data-task-id="${this.id}"]`);
-            taskElement.remove();
+        return await deleteTaskReq(userId, this.id)
+            .then(() => {
+                const taskElement = document.querySelector(`[data-task-id="${this.id}"]`);
+                taskElement.remove();
 
-            this.deleteTaskInTaskList(this.id);
-        });
+                tasklist.deleteTaskInTaskList(this.id);
+            });
     }
 
     async updateTask() { // put request
         const userId = localStorage.getItem('userId');
-        return await TasksApi.updateData(userId, this.id, this)
-        .then(() => {
-            const taskElement = document.querySelector(`[data-task-id="${this.id}"]`);
-            const editedTaskElement = this.createTaskElement();
+        return await putTaskReq(userId, this.id, this)
+            .then(() => {
+                const taskElement = document.querySelector(`[data-task-id="${this.id}"]`);
+                const editedTaskElement = this.createTaskElement();
 
-            taskElement.replaceWith(editedTaskElement);
+                taskElement.replaceWith(editedTaskElement);
 
-            this.updateTaskInTaskList(this.id, this);
-        });
+                tasklist.updateTaskInTaskList(this.id, this);
+            });
     }
 
     editTask({ editedTitle, editedText, editedPriority }) {

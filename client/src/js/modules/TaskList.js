@@ -1,13 +1,11 @@
-import TasksApi from "../helpers/TasksApi.js";
-import Task from "./Task.js";
+import Task from './Task.js';
+import { getTaskReq } from '../requests/tasksRequest';
 
 class TaskList {
     constructor(taskListSelector) {
         this.allTasks = [];
         this.filteredTasks = this.allTasks;
         this.taskListElement = document.querySelector(taskListSelector);
-
-        Task.TaskList = this;
     }
 
     getFilteredTasks({ search: searchText, 'active-filter': activeFilter, 'date-filter': dateFilter, 'date-range-from': dateFrom, 'date-range-to': dateTo, priority }) {
@@ -63,10 +61,10 @@ class TaskList {
         this.filteredTasks = this.allTasks;
     }
 
-    async getAllTasks(userId) {
+    async getTasks(userId) {
         this.allTasks.length = 0;
 
-        return await TasksApi.getData(userId)
+        return await getTaskReq(userId)
             .then(tasks => {
                 tasks.forEach(el => {
                     const task = new Task(el);
@@ -75,6 +73,22 @@ class TaskList {
 
                 this.renderTasks();
             });
+    }
+
+    deleteTaskInTaskList = id => {
+        this.allTasks = this.allTasks.filter(task => task.id !== id);
+        this.filteredTasks = this.allTasks;
+    };
+
+    updateTaskInTaskList = (id, newData) => {
+        this.allTasks = this.allTasks.map(task => task.id === id ? newData : task);
+        this.filteredTasks = this.allTasks;
+    };
+
+    postTaskInTaskList = data => {
+        this.allTasks.push(data);
+
+        this.renderTasks();
     }
 }
 

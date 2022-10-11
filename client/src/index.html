@@ -10,6 +10,8 @@
 
 <header class="header">
     <div class="header__container container">
+
+        <!-- auth buttons -->
         <div class="header__buttons">
             <button class="header__button header__button--login" type="button" data-mode="login">Log in</button>
             <button class="header__button header__button--register" type="button" data-mode="register">Register</button>
@@ -19,6 +21,8 @@
 
 <main class="main">
     <div class="main__container container">
+
+        <!-- form -->
         <form class="form">
             <label class="form__label" for="title">Title</label>
             <input class="form__title" name="title" type="text" id="title">
@@ -37,6 +41,7 @@
 
         <section class="task">
            
+            <!-- form filter -->
             <form class="task__form" name="filter" autocomplete="off">
 
                 <div class="task__controls">
@@ -64,20 +69,22 @@
                     Priority
                     <select name="priority">
                         <option value="none">-</option>
-                        <option value="ask">ask</option> <!-- зростання -->
-                        <option value="desk">desc</option> <!-- спадання -->
+                        <option value="ask">ask</option>
+                        <option value="desk">desc</option>
                     </select>
                     
                     <button type="submit">Show tasks</button>
                 </div>
             </form>
-            <!-- sort buttons -->
+
+            <!-- task list -->
             <ul class="task__list">
             </ul>
         </section>
     </div>
 </main>
 
+<!-- modal -->
 <div class="modal">
     <div class="modal__wrapper">
         <div class="modal__tabs">

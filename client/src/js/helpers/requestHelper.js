@@ -2,23 +2,23 @@ import { API_URL } from "../constants/apiUrl";
 
 const apiUrl = API_URL;
 
-export const get = async (entityName, id = '') => {
+export async function getReq(entityName, id = '') {
     return await makeRequest(`${entityName}/${id}`, 'GET');
 }
 
-export const post = async (entityName, body) => {
+export async function postReq(entityName, body) {
     return await makeRequest(entityName, 'POST', body);
 }
 
-export const put = async (entityName, id, body) => {
+export async function putReq(entityName, id, body) {
     return await makeRequest(`${entityName}/${id}`, 'PUT', body);
 }
 
-export const deleteReq = async (entityName, id) => {
+export async function deleteReq(entityName, id) {
     return await makeRequest(`${entityName}/${id}`, 'DELETE');
 }
 
-const makeRequest = async (path, method, body) => {
+async function makeRequest(path, method, body) {
     try {
         const url = `${apiUrl}/${path}`;
         const options = {
@@ -32,7 +32,6 @@ const makeRequest = async (path, method, body) => {
 
         if (res.ok) return dataObj;
 
-        // alert(`${dataObj.message}`);
         return dataObj;
     } catch (err) {
         console.error(err);

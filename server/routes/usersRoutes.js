@@ -46,19 +46,19 @@ usersRouter.post("/login", function (req, res) {
 });
 
 // GET user by id
-usersRouter.get("/:userId", function (req, res) {
-    let data = readFileSync(databasePath, 'utf8');
-    data = JSON.parse(data);
+// usersRouter.get("/:userId", function (req, res) {
+//     let data = readFileSync(databasePath, 'utf8');
+//     data = JSON.parse(data);
 
-    let userId = req.params.userId;
+//     let userId = req.params.userId;
 
-    let user = data.users.find(({ id }) => id === userId);
+//     let user = data.users.find(({ id }) => id === userId);
 
-    if (user) {
-        res.send(user);
-    } else {
-        res.status(404).send();
-    }
-});
+//     if (user) {
+//         res.send(user);
+//     } else {
+//         res.status(404).send();
+//     }
+// });
 
 export default usersRouter;
