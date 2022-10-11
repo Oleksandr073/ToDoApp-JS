@@ -1,18 +1,28 @@
-import { getReq, postReq, putReq, deleteReq } from '../helpers/requestHelper';
+import makeRequest from '../helpers/requestHelper';
 import { USERS_ENTITY } from '../constants/entities';
 
-const entity = USERS_ENTITY;
+export const userApi = {
+    async registerUser(data) {
+        try {
+            return await makeRequest({
+                entityName: USERS_ENTITY + '/register',
+                body: data,
+                method: 'POST',
+            });
+        } catch (error) {
+            throw error;
+        }
+    },
 
-// export async function getUser(userId) {
-//     return getReq(entity, userId);
-// }
-
-export async function registerUser(data) {
-    const url = entity + '/register';
-    return postReq(url, data);
-}
-
-export async function loginUser(data) {
-    const url = entity + '/login';
-    return postReq(url, data);
+    async loginUser(data) {
+        try {
+            return await makeRequest({
+                entityName: USERS_ENTITY + '/login',
+                body: data,
+                method: 'POST',
+            });
+        } catch (error) {
+            throw error;
+        }
+    },
 }

@@ -1,24 +1,54 @@
-import { getReq, postReq, putReq, deleteReq } from '../helpers/requestHelper';
+import makeRequest from '../helpers/requestHelper';
 import { TASKS_ENTITY } from '../constants/entities';
 
-const entity = TASKS_ENTITY;
+export const taskApi = {
 
-export async function getTaskReq(userId) {
-    const url = entity + '/' + userId;
-    return getReq(url);
-}
+    async getTasks(userId) {
+        try {
+            return await makeRequest({
+                entityName: TASKS_ENTITY + '/' + userId,
+                method: 'GET',
+            });
+        } catch (error) {
+            throw new Error('Failed to get tasks');
+        }
+    },
 
-export async function postTaskReq(userId, data) {
-    const url = entity + '/' + userId;
-    return postReq(url, data);
-}
+    async createTask(userId, data) {
+        try {
+            return await makeRequest({
+                entityName: TASKS_ENTITY + '/' + userId,
+                body: data,
+                method: 'POST',
+            });
+        } catch (error) {
+            throw new Error('Failed to create task');
+        }
+    },
 
-export async function putTaskReq(userId, id, data) {
-    const url = entity + '/' + userId;
-    return putReq(url, id, data);
-}
+    async updateTask(userId, id, data) {
+        try {
+            return await makeRequest({
+                entityName: TASKS_ENTITY + '/' + userId,
+                id,
+                body: data,
+                method: 'PUT',
+            });
+        } catch (error) {
+            throw new Error('Failed to update task');
+        }
+    },
 
-export async function deleteTaskReq(userId, id) {
-    const url = entity + '/' + userId;
-    return deleteReq(url, id);
+    async deleteTask(userId, id) {
+        try {
+            return await makeRequest({
+                entityName: TASKS_ENTITY + '/' + userId,
+                id,
+                method: 'DELETE',
+            });
+        } catch (error) {
+            throw new Error('Failed to delete task');
+        }
+    },
+
 }

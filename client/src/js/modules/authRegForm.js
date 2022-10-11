@@ -1,4 +1,5 @@
-import { registerUser, loginUser } from '../requests/usersRequest';
+import getFormDataHelper from '../helpers/getFormDataHelper';
+import { userApi } from '../requests/usersRequest';
 import modal from './modal';
 
 import tasklist from './TaskList';
@@ -32,23 +33,26 @@ export default function authRegForm() {
                 form.setAttribute('autocomplete', 'off');
                 form.innerHTML = this.HTML;
 
-                form.addEventListener('submit', (event) => {
+                form.addEventListener('submit', async (event) => {
                     event.preventDefault();
 
-                    const formData = new FormData(event.currentTarget)
-                    const registerInfo = {};
-                    formData.forEach((value, name) => registerInfo[name] = value);
+                    const registerInfo = getFormDataHelper(event.currentTarget);
 
-                    if (registerInfo['password'] == registerInfo['repeat-password']) {
+                    try {
+                        if (registerInfo['password'] != registerInfo['repeat-password']) {
+                            throw new Error('different passwords');
+                        }
+
                         registerInfo['repeat-password'] = undefined;
-                        registerUser(registerInfo)
-                        .then(response => {
-                            localStorage.setItem('userId', response.id);
-                            form.reset();
-                            logout();
-                        })
-                    } else {
-                        console.warn('different passwords')
+                        const { id } = await userApi.registerUser(registerInfo)
+
+                        localStorage.setItem('userId', id);
+                        form.reset();
+                        document.querySelector('.modal').classList.remove('modal--open');
+                        logout();
+
+                    } catch (error) {
+                        alert(error.message);
                     }
                 })
 
@@ -75,20 +79,21 @@ export default function authRegForm() {
                 form.setAttribute('autocomplete', 'off');
                 form.innerHTML = this.HTML;
 
-                form.addEventListener('submit', (event) => {
+                form.addEventListener('submit', async (event) => {
                     event.preventDefault();
 
-                    const formData = new FormData(event.currentTarget);
-                    const loginInfo = {};
-                    formData.forEach((value, name) => loginInfo[name] = value);
+                    const loginInfo = getFormDataHelper(event.currentTarget);
 
-                    loginUser(loginInfo)
-                    .then(response => {
-                        localStorage.setItem('userId', response.id);
+                    try {
+                        const { id } = await userApi.loginUser(loginInfo)
+                        localStorage.setItem('userId', id);
 
                         form.reset();
+                        document.querySelector('.modal').classList.remove('modal--open');
                         logout();
-                    })
+                    } catch (error) {
+                        alert(error.message);
+                    }
                 })
 
                 return form;

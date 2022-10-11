@@ -1,5 +1,5 @@
 import Task from './Task.js';
-import { getTaskReq } from '../requests/tasksRequest';
+import { taskApi } from '../requests/tasksRequest';
 
 class TaskList {
     constructor(taskListSelector) {
@@ -62,17 +62,19 @@ class TaskList {
     }
 
     async getTasks(userId) {
-        this.allTasks.length = 0;
+        try {
+            this.allTasks.length = 0;
 
-        return await getTaskReq(userId)
-            .then(tasks => {
-                tasks.forEach(el => {
-                    const task = new Task(el);
-                    this.allTasks.push(task);
-                });
-
-                this.renderTasks();
+            const tasks = await taskApi.getTasks(userId)
+            tasks.forEach(el => {
+                const task = new Task(el);
+                this.allTasks.push(task);
             });
+
+            this.renderTasks();
+        } catch (error) {
+            alert(error);
+        }
     }
 
     deleteTaskInTaskList = id => {
