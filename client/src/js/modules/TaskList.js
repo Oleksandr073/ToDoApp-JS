@@ -1,62 +1,92 @@
-import Api from "../helpers/Api.js";
 import Task from "./Task.js";
 
-const api = new Api('todoitems');
-
 export default class TaskList {
-    constructor(taskListSelector) {
+    constructor({ taskListWrapperSelector, taskListSortByActiveBtnSelector, taskListSortByDateBtnSelector }) {
         this.allTasks = [];
+
+        this.taskListWrapper = document.querySelector(taskListWrapperSelector);
+        this.taskListSortByActiveBtn = document.querySelector(taskListSortByActiveBtnSelector);
+        this.taskListSortByDateBtn = document.querySelector(taskListSortByDateBtnSelector);
+
+        this.taskListSortByActiveBtn.addEventListener('click', () => {
+            const isSortedByActive = this.taskListSortByActiveBtn.getAttribute('data-isSortedByActive');
+
+            if (!isSortedByActive) {
+                this.sortByActive();
+                this.taskListSortByActiveBtn.setAttribute('data-isSortedByActive', '1');
+            } else {
+                this.sortByNotActive();
+                this.taskListSortByActiveBtn.setAttribute('data-isSortedByActive', '');
+            }
+
+            this.renderTasks();
+        })
+
+        this.taskListSortByDateBtn.addEventListener('click', () => {
+            const isSortedByDate = this.taskListSortByDateBtn.getAttribute('data-isSortedByDate');
+
+            if (!isSortedByDate) {
+                this.sortByNewDate();
+                this.taskListSortByDateBtn.setAttribute('data-isSortedByDate', '1');
+            } else {
+                this.sortByLastDate();
+                this.taskListSortByDateBtn.setAttribute('data-isSortedByDate', '');
+            }
+
+            this.renderTasks();
+        })
     }
 
-    con() {
-        console.log(this.allTasks);
+    sortByActive() {
+        this.allTasks.sort((a, b) =>  a.isActive === false ? -1 : 1);
     }
 
-    deleteTask(index) {
-        this.allTasks.splice(index, 1);
+    sortByNotActive() {
+        this.allTasks.sort((a, b) => a.isActive === true ? -1 : 1);
     }
 
-    renderTasks(taskListSelector) {
-        const taskListElement = document.querySelector(taskListSelector);
+    sortByNewDate() {
+        this.allTasks.sort((a, b) => new Date(a.date) - new Date(b.date));
+    }
+
+    sortByLastDate() {
+        this.allTasks.sort((a, b) => new Date(b.date) - new Date(a.date));
+    }
+
+    renderTasks() {
+        this.taskListWrapper.innerHTML = '';
 
         this.allTasks.forEach(task => {
             const taskElement = task.createTaskElement();
-            taskListElement.prepend(taskElement);
+            this.taskListWrapper.prepend(taskElement);
         });
     }
 
     async getAllTasks() {
-        return await api.getData()
-        .then(response => {
+        const taskAmount = localStorage.getItem('taskAmount');
 
-            const tasks = Object.keys(response).map(key => {
+        for (let id = 1; id <= taskAmount; id++) {
+            const taskId = JSON.parse(localStorage.getItem(`${id}`));
+            if (taskId !== null) {
                 const task = new Task({
-                    ...response[key],
-                    id: key
+                    ...taskId,
+                    id
                 });
 
                 this.allTasks.push(task);
 
                 task.deleteTaskInTaskList = id => {
-                    console.log(this.allTasks);
                     this.allTasks = this.allTasks.filter(task => task.id !== id);
-                    console.log(this.allTasks);
                 };
 
                 task.updateTaskInTaskList = (id, newData) => {
-                    // console.log(this.allTasks);
-                    // this.allTasks = this.allTasks.map(task => task.id === id ? newData : task);
-                    // console.log(this.allTasks);
+                    this.allTasks = this.allTasks.map(task => task.id === id ? newData : task);
                 }; 
 
-                task.postTaskInTaskList =() => {
-                    
+                task.postTaskInTaskList = data => {
+                    this.allTasks.push(data);
                 };
-
-                return task;
-            })
-
-            return tasks;
-        });
+            }
+        }
     }
 }

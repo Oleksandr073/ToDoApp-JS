@@ -1,13 +1,10 @@
-import Api from "../helpers/Api.js";
-
-const api = new Api('todoitems');
-
 export default class Task {
-    constructor({ title, text, isActive = true, id }) {
+    constructor({ title, text, isActive = true, date, id }) {
         this.title = title;
         this.text = text;
         this.isActive = isActive;
         this.id = id;
+        this.date = date;
     }
 
     deleteTaskInTaskList(id) {
@@ -18,44 +15,54 @@ export default class Task {
 
     }
 
-    postTaskInTaskList() {
+    postTaskInTaskList(data) {
 
     }
 
     getTaskInfo() {
         const { id, ...infoWithoutId } = this;
+        // infoWithoutId.date = infoWithoutId.date.toJSON();
         return infoWithoutId;
     }
 
-    postTask() { // post request
-        return api.postData(this.getTaskInfo());
+    postTask() {
+        this.date = new Date();
+
+        const lastId = localStorage.getItem('taskAmount') === null ? 1 : Number(localStorage.getItem('taskAmount')) + 1;
+ 
+        this.id = lastId;
+
+        localStorage.setItem(`${this.id}`, JSON.stringify(this.getTaskInfo()));
+        localStorage.setItem('taskAmount', `${this.id}`);
+
+        this.postTaskInTaskList(this);
     }
 
-    deleteTask() { // delete request
-        api.deleteData(this.id)
-        .then(() => {
-            const taskElement = document.querySelector(`[data-task-id="${this.id}"]`);
-            taskElement.remove();
+    deleteTask() { 
+        localStorage.removeItem(`${this.id}`);
 
-            this.deleteTaskInTaskList(this.id);
-        });
+        const taskElement = document.querySelector(`[data-task-id="${this.id}"]`);
+        taskElement.remove();
+
+        this.deleteTaskInTaskList(this.id);
     }
 
-    updateTask() { // patch request
-        api.updateData(this.id, this.getTaskInfo())
-        .then(() => {
-            const taskElement = document.querySelector(`[data-task-id="${this.id}"]`);
-            const editedTaskElement = this.createTaskElement();
+    updateTask() {
+        
 
-            taskElement.replaceWith(editedTaskElement);
+        localStorage.setItem(`${this.id}`, JSON.stringify(this.getTaskInfo()));
 
-            updateTaskInTaskList(this.id, this);
-        });
+        const taskElement = document.querySelector(`[data-task-id="${this.id}"]`);
+        const editedTaskElement = this.createTaskElement();
+        taskElement.replaceWith(editedTaskElement);
+        
+        this.updateTaskInTaskList(this.id, this);
     }
 
     editTask(editedTitle, editedText) {
         this.title = editedTitle;
         this.text = editedText;
+        this.date = new Date();
 
         this.updateTask();
     }
@@ -71,9 +78,15 @@ export default class Task {
         taskElement.classList.add('task__item');
         taskElement.setAttribute('data-task-id', this.id);
 
+        const options = {
+            year: 'numeric', month: 'numeric', day: 'numeric',
+            hour: 'numeric', minute: 'numeric', second: 'numeric',
+            hour12: false
+        };
+
         taskElement.innerHTML =
             `<label class="task__check">
-                <input class="task__check-box" type="checkbox" name="task" ${!this.isActive ? 'checked' : ''}>
+                <input class="task__check-box" type="checkbox" name="task" ${this.isActive ? '' : 'checked'}>
                 <svg class="task__check-icon">
                     <use href="./sprite.svg#check"></use>
                 </svg>
@@ -81,6 +94,7 @@ export default class Task {
             <div class="task__meta">
                 <h3 class="task__title">${this.title}</h3>
                 <p class="task__text">${this.text}</p>
+                <time class="task__date">${new Date(this.date).toLocaleString('en-US', options)}</time>
             </div>
             <div class="task__buttons">
                 <button class="task__button task__button--edit" aria-label="Edit task" title="Edit task">
@@ -104,77 +118,6 @@ export default class Task {
         deleteButton.addEventListener('click', () => {
             this.deleteTask();
         });
-
-        return taskElement;
-    }
-}
-
-
-
-
-
-
-
-const task = {
-    title: 'Title',
-    text: 'text text text',
-    isActive: true,
-    id: '-weyfhyjferftrmegf',
-    date: new Date(),
-
-    checkTask() {
-        this.isActive = !this.isActive;
-    },
-
-    editTask(editedTitle, editedText) {
-        this.title = editedTitle;
-        this.text = editedText;
-        this.date = new Date();
-    },
-
-    deleteTask() {
-    deleteData(this.id)
-    .then(() => {
-        const taskElement = document.querySelector(`[data-task-id="${this.id}"]`);
-        taskElement.remove();
-    });
-    },
-
-    getTask() {
-        const taskElement = document.createElement('li');
-        taskElement.classList.add('task__item');
-        taskElement.setAttribute('data-task-id', this.id);
-
-        const options = {
-            year: 'numeric', month: 'numeric', day: 'numeric',
-            hour: 'numeric', minute: 'numeric', second: 'numeric',
-            hour12: false
-        };
-
-        taskElement.innerHTML =
-            `<label class="task__check">
-                <input class="task__check-box" type="checkbox" name="task" ${this.isActive ? 'checked' : ''}>
-                <svg class="task__check-icon">
-                    <use href="./sprite.svg#check"></use>
-                </svg>
-            </label>
-            <div class="task__meta">
-                <h3 class="task__title">${this.title}</h3>
-                <p class="task__text">${this.text}</p>
-                <time class="task__date">${new Date(this.date).toLocaleString('en-US', options)}</time>
-            </div>
-            <div class="task__buttons">
-                <button class="task__button task__button--edit" aria-label="Edit task" title="Edit task">
-                    <svg class="task__button-icon">
-                        <use href="./sprite.svg#edit"></use>
-                    </svg>
-                </button>
-                <button class="task__button task__button--delete" aria-label="Delete task" title="Delete task">
-                    <svg class="task__button-icon">
-                        <use href="./sprite.svg#delete"></use>
-                    </svg>
-                </button>
-            </div>`;
 
         return taskElement;
     }
