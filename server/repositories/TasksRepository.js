@@ -3,67 +3,51 @@ import BaseRepository from './BaseRepository.js';
 class TasksRepository extends BaseRepository {
     constructor() {
         super('tasks');
+        this.userId = '';
+    }
+
+    setDataInDatabase(tasks) {
+        const data = super.getDataFromDatabase();
+        const oldTasks = data.find(({ id }) => id === this.userId);
+        oldTasks.tasks = tasks;
+        super.setDataInDatabase(data);
+    }
+
+    getDataFromDatabase() {
+        const data = super.getDataFromDatabase();
+        const tasks = data.find(item => item.id === this.userId)?.tasks;
+        return tasks;
     }
 
     getAll(userId) {
-        const tasks = super.getAll().find(item => item.id === userId)?.tasks;
-        return tasks ? tasks : [];
+        this.userId = userId;
+        return super.getAll() || [];
     }
 
-    create(userId, data) {
-        const userTasks = super.getOne({ id: userId });
+    create(userId, body) {
+        this.userId = userId;
 
-        data.id = this.generateId();
-        if (userTasks) {
-            userTasks.tasks.push(data);
-
-            super.update(userId, userTasks);
-        } else {       
-            const newUserTasks = {
-                tasks: [
-                    data
-                ]
+        if (!this.getDataFromDatabase()) {
+            const data = super.getDataFromDatabase();
+            const newUserInfo = {
+                id: this.userId,
+                tasks: []
             }
+            data.push(newUserInfo);
+            super.setDataInDatabase(data);
+        };
 
-            super.create(newUserTasks, userId);
-        }
-
-        return data;  
+        return super.create(body);
     }
 
     update(userId, taskId, body) {
-        const userTasks = super.getOne({ id: userId });
-
-        if (!userTasks) {
-            return null;
-        }
-
-        const updatedTask = {
-            ...userTasks.tasks.find(task => task.id === taskId),
-            ...body
-        }
-
-        userTasks.tasks = userTasks.tasks.map(task => task.id === taskId ? updatedTask : task);
-
-        super.update(userId, userTasks);
-
-        return updatedTask;
+        this.userId = userId;
+        return super.update(taskId, body);
     }
 
     delete(userId, taskId) {
-        const userTasks = super.getOne({ id: userId });
-
-        const deletedTask = userTasks.tasks.find(task => task.id === taskId);
-
-        if (!deletedTask) {
-            return null;
-        }
-
-        userTasks.tasks = userTasks.tasks.filter(task => task.id !== taskId);
-
-        super.update(userId, userTasks);
-
-        return deletedTask;
+        this.userId = userId;
+        return super.delete(taskId);
     }
 }
 
