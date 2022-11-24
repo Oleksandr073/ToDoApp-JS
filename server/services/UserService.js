@@ -46,6 +46,28 @@ class UserService {
         }
     }
 
+    async update(body) {
+        const user = UsersRepository.getById(body.id);
+        if (!user) {
+            throw ApiError.BadRequest('User with this id not found'); //
+        }
+
+        const isPassEqual = await bcrypt.compare(body.password, user.password);
+        if (!isPassEqual) {
+            throw ApiError.BadRequest('Current password is incorrect');
+        }
+
+        const hashPassword = await bcrypt.hash(body['new-password'], 3);
+
+        const updatedUser = UsersRepository.update(user.id, { password: hashPassword });
+
+        const { password, ...userDto } = updatedUser;
+
+        return {
+            user: userDto
+        }
+    }
+
     logout(refreshToken) {
         const token = TokenService.removeToken(refreshToken);
         return token;
