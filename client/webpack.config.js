@@ -1,6 +1,6 @@
 const path = require('path');
-const HTMLWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+// const HTMLWebpackPlugin = require('html-webpack-plugin');
+// const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const rimraf = require('rimraf');
@@ -11,24 +11,30 @@ const webpackConfig = {
     context: path.resolve(__dirname, 'src'),
     entry: './js/index.js',
     output: {
-        path: path.resolve(__dirname, 'public'),
-        filename: '[name].[contenthash].js',
+        path: path.resolve(__dirname, 'public/static'),
+        // filename: '[name].[contenthash].js',
+        filename: 'script.js',
     },
     plugins: [
-        new HTMLWebpackPlugin({
-            template: './index.html',
-            minify: {
-                collapseWhitespace: !isDev
-            }
-        }),
-        new CleanWebpackPlugin(),
+        // new HTMLWebpackPlugin({
+        //     template: './index.html',
+        //     minify: {
+        //         collapseWhitespace: !isDev
+        //     }
+        // }),
+        // new CleanWebpackPlugin(), //!
         new MiniCssExtractPlugin({
-            filename: 'style.[contenthash].css'
+            // filename: 'style.[contenthash].css',
+            filename: 'style.css',
         }),
         new CopyWebpackPlugin({
             patterns: [
                 {
                     from: path.resolve(__dirname, 'src/svg/sprite.svg'),
+                    to: path.resolve(__dirname, 'public/static')
+                },
+                {
+                    from: path.resolve(__dirname, 'src/index.html'),
                     to: path.resolve(__dirname, 'public')
                 }
             ]
