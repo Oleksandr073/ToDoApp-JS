@@ -5,101 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDoApp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./static/style.css">
 </head>
 <body>
 
-<header class="header">
-    <div class="header__container container">
+<div id="notifications" class="notifications"></div>
+<div id="app"></div>
 
-        <!-- auth buttons -->
-        <div class="header__buttons">
-            <button class="header__button header__button--login" type="button" data-mode="login">Log in</button>
-            <button class="header__button header__button--register" type="button" data-mode="register">Register</button>
-        </div>
-    </div>
-</header>
-
-<main class="main">
-    <div class="main__container container">
-
-        <!-- form -->
-        <form class="form">
-            <label class="form__label" for="title">Title</label>
-            <input class="form__title" name="title" type="text" id="title">
-
-            <label class="form__label" for="text">Text</label>
-            <textarea class="form__text" name="text" type="text" id="text"></textarea>
-
-            <label class="form__label" for="text">Priority</label>
-            <div class="form__priority">
-                <input class="form__range" type="range" name="priority" value="1" min="1" max="3" step="1">
-                <p class="form__range-value">1</p>
-            </div>
-
-            <button class="form__button" type="submit">Add task</button>
-        </form>
-
-        <section class="task">
-           
-            <!-- form filter -->
-            <form class="task__form" name="filter" autocomplete="off">
-
-                <div class="task__controls">
-                    <button class="task__button-filter" type="button">Filters</button>
-
-                    <label class="task__search-label" for="search">Search</label>
-                    <input class="task__search-input" type="search" name="search" id="search">
-                    <button type="submit">Search tasks</button>
-                </div>
-
-                <div class="task__filter task__filter--hide">
-                    <select name="active-filter">
-                        <option value="all" selected>All tasks</option>
-                        <option value="active">Active tasks</option>
-                        <option value="inactive">Inactive tasks</option>
-                    </select>
-                    <select name="date-filter">
-                        <option value="new-first" selected>New-first tasks</option>
-                        <option value="old-first">Old-first tasks</option>
-                    </select>
-                    <div>
-                        <input type="datetime-local" name="date-range-from">
-                        <input type="datetime-local" name="date-range-to">
-                    </div>
-                    Priority
-                    <select name="priority">
-                        <option value="none">-</option>
-                        <option value="ask">ask</option>
-                        <option value="desk">desc</option>
-                    </select>
-                    
-                    <button type="submit">Show tasks</button>
-                </div>
-            </form>
-
-            <!-- task list -->
-            <ul class="task__list">
-            </ul>
-        </section>
-    </div>
-</main>
-
-<!-- modal -->
-<div class="modal">
-    <div class="modal__wrapper">
-        <div class="modal__tabs">
-            <div class="modal__tab">
-                <input class="modal__radio" id="login" type="radio" name="tab" data-mode="login">
-                <label class="modal__label" for="login">Log in</label>
-            </div>
-            <div class="modal__tab">
-                <input class="modal__radio" id="register" type="radio" name="tab" data-mode="register">
-                <label class="modal__label" for="register">Register</label>
-            </div>
-        </div>
-    </div>
-</div>
-    
-
+<script src="./static/script.js"></script>
 </body>
 </html>
