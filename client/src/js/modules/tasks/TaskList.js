@@ -1,11 +1,11 @@
 import Task from './Task.js';
-import { taskApi } from '../requests/tasksRequest';
+import { taskApi } from '../../requests/tasksRequest';
 
-class TaskList {
-    constructor(taskListSelector) {
+export default class TaskList {
+    constructor(tasksListElement) {
         this.allTasks = [];
         this.filteredTasks = this.allTasks;
-        this.taskListElement = document.querySelector(taskListSelector);
+        this.taskListElement = tasksListElement;
     }
 
     getFilteredTasks({ search: searchText, 'active-filter': activeFilter, 'date-filter': dateFilter, 'date-range-from': dateFrom, 'date-range-to': dateTo, priority }) {
@@ -64,11 +64,16 @@ class TaskList {
 
     async getTasks() {
         try {
-            this.allTasks.length = 0;
+            this.allTasks.length = 0; //
+
+            await new Promise(res => { setTimeout(res, 1000); }); // loading
 
             const tasks = await taskApi.getTasks()
             tasks.forEach(el => {
-                const task = new Task(el);
+                const task = new Task({
+                    taskList: this,
+                    ...el,
+                });
                 this.allTasks.push(task);
             });
 
@@ -76,6 +81,13 @@ class TaskList {
         } catch (error) {
             alert(error);
         }
+    }
+
+    newTask = taskInfo => {
+        return new Task({
+            taskList: this,
+            ...taskInfo,
+        });
     }
 
     deleteTaskInTaskList = id => {
@@ -94,7 +106,3 @@ class TaskList {
         this.renderTasks();
     }
 }
-
-const tasklist = new TaskList('.task__list');
-
-export default tasklist;
