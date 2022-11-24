@@ -1,0 +1,22 @@
+.choose {
+    padding: 4px 14px;
+
+    background-color: var(--primaryBgColor);
+    border: 1px solid $borderColor;
+    border-radius: $borderRadius;
+
+    transition: background-color $fastTransition;
+
+    // .choose__item
+
+    &__item {
+        padding: 3px 0;
+        
+        @include fontSizeLineHeight(16px, 18px);
+        color: var(--primaryTextColor);
+
+        border-bottom: 1px solid $borderColor;
+
+        transition: color $fastTransition;
+    }
+}

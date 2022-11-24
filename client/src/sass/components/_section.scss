@@ -1,0 +1,12 @@
+.section {
+    height: 100%;
+    padding: 110px 0;
+
+    &--center {
+
+        @media screen and (min-width: 500px) and (min-height: 741px) {
+            display: flex;
+            align-items: center;
+        }
+    }
+}

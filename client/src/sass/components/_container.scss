@@ -1,6 +1,10 @@
 .container {
     width: 100%;
-    max-width: 700px;
-    padding: 0 30px;
+    max-width: 360px;
+    padding: 0 15px;
     margin: 0 auto;
+
+    &--big {
+        max-width: 730px;
+    }
 }

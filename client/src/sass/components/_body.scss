@@ -1,7 +1,12 @@
 body {
-    margin: 0;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Inter', sans-serif;
     line-height: 1;
 
-    background-color: #dddddd;
+    color: var(--primaryTextColor);
+
+    background-color: var(--primaryBgColor);
+}
+
+.body {
+    transition: background-color $fastTransition;
 }

@@ -1,0 +1,21 @@
+.input {
+    padding: 10px 17px;
+    
+    font: inherit;
+    @include fontSizeLineHeight(16px, 18px);
+    
+    color: inherit;
+
+    background-color: var(--primaryBgColor);
+    border: 1px solid $borderColor;
+    border-radius: $borderRadius;
+
+    box-shadow: var(--shadow);
+
+    transition: color $fastTransition, background-color $fastTransition, box-shadow $fastTransition;
+
+    &:focus {
+        outline: none;
+        border: 1px solid $accentColor;
+    }
+}

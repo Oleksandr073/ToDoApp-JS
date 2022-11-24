@@ -1,4 +1,46 @@
-// breakpoints
-$small: 576px;
-$medium: 768px;
-$large: 992px;
+$functionTransition: ease;
+$fastTransition: 200ms $functionTransition;
+$slowTransition: 400ms $functionTransition;
+$borderRadius: 10px;
+$borderColor: #DADADA;
+$accentColor: #FD7013;
+$errorColor: #FF5B5C;
+$successColor: #00C89B;
+$whiteColor: #FFF7F7;
+
+$whiteColor: #FFF7F7;
+$secondaryBlackColor: #222831;
+$primaryBlackColor: #393E46;
+$lightGreyColor: #EEEEEE;
+$whiteShadow: 0px 2px 4px 2px rgba(218, 218, 218, 0.2);
+$blackShadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.2);
+$modalWhiteBgColor: rgba(255, 247, 247, 0.7);
+$modalBlackBgColor: rgba(57, 62, 70, 0.7);
+
+html {
+    --logoColor: #{$secondaryBlackColor};
+    --primaryBgColor: #{$whiteColor};
+    --secondaryBgColor: #{$whiteColor};
+    --headerBgColor: #{$lightGreyColor};
+    --addTaskBtnBgColor: #{$lightGreyColor};
+    --primaryTextColor: #{$primaryBlackColor};
+    --secondaryTextColor: #{$secondaryBlackColor};
+    --shadow: #{$blackShadow};
+    --iconFill: #{$accentColor};
+    --modalBgColor: #{$modalWhiteBgColor};
+
+    --flickAnimationDuration: 1000ms;
+}
+
+html[data-dark-theme] {
+    --logoColor: #{$whiteColor};
+    --primaryBgColor: #{$primaryBlackColor};
+    --secondaryBgColor: #{$secondaryBlackColor};
+    --headerBgColor: #{$secondaryBlackColor};
+    --addTaskBtnBgColor: #{$secondaryBlackColor};
+    --primaryTextColor: #{$whiteColor};
+    --secondaryTextColor: #{$whiteColor};
+    --shadow: #{$whiteShadow};
+    --iconFill: #{$whiteColor};
+    --modalBgColor: #{$modalBlackBgColor};
+}

@@ -1,0 +1,25 @@
+.select-hidden {
+    display: none;
+}
+
+.select {
+    position: relative;
+
+    &__selected {
+        text-align: center;
+    }
+
+    &__options {
+        width: 100%;
+        display: none;
+
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1;
+
+        &--active {
+            display: block;
+        }
+    }
+}

@@ -1,0 +1,166 @@
+.notifications {
+    position: fixed;
+    top: 100px;
+    right: 15px;
+    z-index: 3;
+
+    @include mediaMaxWidth(700px) {
+        top: 85px;
+    }
+
+    @include mediaMaxWidth(500px) {
+        right: 50%;
+
+        transform: translate(50%, 0);
+    }
+
+    // .notifications__list
+
+    &__list {
+        width: 330px;
+
+        position: relative;
+    }
+
+    // .notifications__item
+
+    &__item {
+        // position: absolute;
+        // top: 0; //
+        // left: 0;
+        // z-index: 1;
+
+        display: flex;
+        flex-direction: column;
+        width: 330px;
+        // height: 100%;
+        height: 90px;
+        padding: 15px 30px 10px;
+
+        color: $whiteColor;
+
+        border-radius: $borderRadius;
+        box-shadow: var(--shadow);
+
+        // opacity: 0;
+        // transform: translate(101%, 0);
+
+        opacity: 1;
+        transform: translateX(0);
+
+        animation: notification-in $slowTransition;
+
+        transition: opacity $slowTransition, transform $slowTransition, top $slowTransition;
+
+        &:not(:last-child) {
+            margin-bottom: 30px;
+        }
+
+        @include mediaMaxWidth(700px) {
+            &:not(:last-child) {
+                margin-bottom: 15px;
+            }
+        }
+
+        &--success {
+            background-color: $successColor;
+        }
+
+        &--error {
+            background-color: $errorColor;
+        }
+
+        &--hide {
+            opacity: 0;
+            transform: translateX(101%);
+        }
+
+        @keyframes notification-in {
+            0% {
+                opacity: 0;
+                transform: translate(101%);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    }
+
+    // .notifications__message
+
+    &__message {
+        margin-bottom: 8px;
+
+        @include fontSizeLineHeight(20px, 24px);
+        font-weight: 600;
+    }
+
+    // .notifications__text
+
+    &__text {
+        margin-bottom: 10px;
+
+        @include fontSizeLineHeight(16px, 19px);
+        font-weight: 500;
+    }
+
+    // .notifications__close
+
+    &__close {
+        @extend %button-reset;
+
+        width: 15px;
+        height: 15px;
+
+        fill: $whiteColor;
+
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        z-index: 1;
+    }
+
+    // .notifications__icon
+
+    &__icon {
+        width: 15px;
+        height: 15px;
+    }
+
+    // .notifications__progress
+
+    &__progress {
+        width: 100%;
+        height: 4px;
+        margin-top: auto;
+
+        background-color: $borderColor;
+        border-radius: 2px;
+
+        overflow: hidden;
+    }
+
+    // .notifications__line
+
+    &__line {
+        width: 100%;
+        height: 100%;
+
+        background-color: $whiteColor;
+        border-radius: 2px;
+
+        transform: translateX(-101%);
+
+        animation: progress-bar 4000ms linear;
+
+        @keyframes progress-bar {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-101%);
+            }
+        }
+    }
+}

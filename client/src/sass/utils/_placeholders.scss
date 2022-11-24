@@ -1,4 +1,4 @@
-.visually-hidden {
+%hidden {
     position: absolute;
     white-space: nowrap;
     width: 1px;
@@ -9,4 +9,13 @@
     clip: rect(0 0 0 0);
     clip-path: inset(50%);
     margin: -1px;
+}
+
+%button-reset {
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
+    background: none;
+    border: none;
+    color: inherit;
 }

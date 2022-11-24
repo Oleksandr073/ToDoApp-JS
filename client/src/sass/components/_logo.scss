@@ -1,0 +1,16 @@
+.logo {
+    display: inline-block;
+    width: 144px;
+    height: 46px;
+
+    fill: var(--logoColor);
+
+    transition: fill $fastTransition;
+
+    // .logo__icon
+
+    &__icon {
+        width: 144px;
+        height: 46px;
+    }
+}

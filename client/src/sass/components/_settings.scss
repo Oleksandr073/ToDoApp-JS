@@ -1,0 +1,172 @@
+.settings {
+    height: 100vh;
+
+    // .settings__container
+
+    &__container {
+
+    }
+
+    // .settings__item
+
+    &__item {
+
+        &:not(:last-child) {
+            margin-bottom: 40px;
+        }
+    }
+
+    // .settings__title 
+
+    &__title {
+        margin-bottom: 20px;
+
+        font-weight: 700;
+        @include fontSizeLineHeight(20px, 24px);
+
+        color: var(--secondaryTextColor);
+    }
+
+    // .settings__form 
+
+    &__form {
+
+    }
+
+    // .settings__options
+
+    &__options {
+        display: flex;
+    }
+
+    // .settings__option
+
+    &__option {
+
+        &:not(:last-child) {
+            margin-right: 30px;
+        }
+    }
+
+    // .settings__input
+
+    &__input {
+        @extend %hidden;
+    }
+
+    &__input:checked + &__label::after {
+        opacity: 1;
+    }
+
+    // .settings__label
+
+    &__label {
+        display: flex;
+        align-items: center;
+
+        cursor: pointer;
+
+        position: relative;
+
+        &::before {
+            content: '';
+            display: block;
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        
+            border: 2px solid $accentColor;
+            border-radius: 50%;
+        }
+
+        &::after {
+            content: '';
+            display: block;
+            width: 10px;
+            height: 10px;
+
+            background-color: $accentColor;
+            border-radius: 50%;
+
+            opacity: 0;
+
+            transition: opacity $fastTransition;
+
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            z-index: 2;
+
+            transform: translateY(-50%);
+        }
+    }
+
+    // .settings__text
+
+    &__text {
+        font-weight: 500;
+        @include fontSizeLineHeight(16px, 18px);
+    }
+
+    // .settings__choose
+
+    &__choose {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    // .settings__checkbox
+
+    &__checkbox {
+        @extend %hidden;
+    }
+
+    &__checkbox:checked + &__toggle::before {
+        transform: translate(3px, -50%);
+    }
+
+    // .settings__toggle 
+
+    &__toggle {
+        display: inline-block;
+        width: 40px;
+        height: 20px;
+
+        border: 2px solid $accentColor;
+        border-radius: 10px;
+
+        cursor: pointer;
+
+        position: relative;
+
+        &::before {
+            content: '';
+            display: block;
+            width: 10px;
+            height: 10px;
+
+            background-color: $accentColor;
+            border-radius: 50%;
+
+            position: absolute;
+            top: 50%;
+            left: 0;
+            z-index: 2;
+
+            transform: translate(23px, -50%);
+
+            transition: transform $fastTransition;
+        }
+    }
+
+    // .settings__button
+
+    &__button {
+        @extend %button-reset;
+
+        font-weight: 500;
+        @include fontSizeLineHeight(16px, 18px);
+    }
+
+}

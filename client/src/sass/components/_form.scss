@@ -1,75 +1,45 @@
 .form {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 60px;
+
+    // .form__labels
+
+    &__labels {
+        
+    }
 
     // .form__label
 
     &__label {
-        margin-bottom: 5px;
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 15px;
 
-        font-size: 20px;
-    }
-
-    // .form__title
-
-    &__title {
-        margin-bottom: 20px;
-        padding: 10px 20px;
-
-        font-size: 18px;
-
-        border: 1px solid #000000;
-        border-radius: 10px;
+        &:last-child {
+            margin-bottom: 30px;
+        }
     }
 
     // .form__text
 
     &__text {
-        height: 200px;
-        margin-bottom: 30px;
-        padding: 10px 20px;
+        display: inline-block;
+        margin-left: 15px;
+        margin-bottom: 5px;
 
-        font-size: 16px;
+        font-weight: 500;
+        @include fontSizeLineHeight(16px, 19px);
 
-        resize: none;
-
-        border: 1px solid #000000;
-        border-radius: 10px;
+        transition: color $fastTransition;
     }
 
-    // .form__priority
+    // .form__input
 
-    &__priority {
-        display: flex;
-        margin-bottom: 20px;
-    }
-
-    // .form__range
-
-    &__range {
-        margin-right: 10px;
-        
-        cursor: pointer;
-    }
-
-    // .form__range-value 
-
-    &__range-value {
-
+    &__input {
+        width: 100%;
     }
 
     // .form__button
 
     &__button {
-        border: none;
-        background: #ffffff;
-        padding: 10px 20px;
-        cursor: pointer;
-
-        border: 1px solid #000000;
-        border-radius: 10px;
-
-        font-size: 18px;
+        width: 100%;
     }
 }

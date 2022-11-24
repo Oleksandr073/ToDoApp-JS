@@ -1,0 +1,25 @@
+.error {
+    display: block;
+    margin-top: 9px;
+    margin-left: 15px;
+
+    color: $errorColor;
+
+    font-weight: 500;
+    @include fontSizeLineHeight(14px, 17px);
+}
+
+.error-input {
+    border: 1px solid $errorColor;
+}
+
+.error-point {
+    display: block;
+    margin-top: 5px;
+    margin-left: 15px;
+
+    color: $errorColor;
+
+    font-weight: 400;
+    @include fontSizeLineHeight(14px, 17px);
+}

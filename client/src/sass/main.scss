@@ -1,0 +1,31 @@
+// utils
+@import './utils/mixins';
+@import './utils/placeholders';
+@import './utils/variables';
+// basic
+@import './basic/nulling';
+// js-styles
+@import './js-styles/error-js';
+@import './js-styles/textarea-input-js';
+@import './js-styles/select-input-js';
+@import './js-styles/date-input-js';
+//components
+@import './components/body';
+@import './components/button';
+@import './components/logo';
+@import './components/notifications';
+@import './components/header';
+@import './components/main';
+@import './components/container';
+@import './components/section';
+@import './components/input';
+@import './components/form';
+@import './components/register'; //
+@import './components/login'; //
+@import './components/tags';
+@import './components/choose';
+@import './components/search';
+@import './components/tasks';
+@import './components/settings';
+@import './components/no-page';
+@import './components/modal';

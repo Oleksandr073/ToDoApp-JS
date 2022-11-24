@@ -1,0 +1,27 @@
+.no-page {
+    height: 100vh;
+    min-height: 360px;
+
+    transition: color $fastTransition;
+
+    // .no-page__container
+
+    &__container {
+        text-align: center;
+    }
+
+    // .no-page__error
+
+    &__error {
+        margin-bottom: 30px;
+
+        font-size: 64px;
+        font-weight: 700;
+    }
+
+    // .no-page__message
+
+    &__message {
+        @include fontSizeLineHeight(24px, 29px);
+    }
+}

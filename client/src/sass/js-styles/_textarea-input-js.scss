@@ -1,0 +1,12 @@
+.textarea-input-js-hidden {
+    display: none;
+}
+
+.textarea-input-js {
+    min-height: 40px;
+    // max-height: 200px;
+
+    overflow: auto;
+
+    cursor: text;
+}
