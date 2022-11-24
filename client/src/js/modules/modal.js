@@ -1,29 +1,44 @@
-export default function modal(buttonsWrapper) {
-    const modal = document.querySelector('.modal');
-    const loginButton = buttonsWrapper.querySelector('.header__button--login');
-    const registerButton = buttonsWrapper.querySelector('.header__button--register');
+import modalView from "../views/ModalView";
+import { modalOpenAttribute } from "../constants/dataAttributes";
 
-    loginButton.addEventListener('click', openModal);
-    registerButton.addEventListener('click', openModal);
+const modalElement = modalView.modalElement;
 
-    document.addEventListener('keydown', (event) => {
-        if (event.code === 'Escape') closeModal();
-    })
-
-    function openModal() {
-        modal.classList.add('modal--open');
-
-        modal.addEventListener('click', function close(event) {
-
-            if (event.currentTarget === event.target) {
-                closeModal();
-
-                modal.removeEventListener('click', close);
-            }  
-        })
+function closeModalOnClickHandler(event) {
+    if (event.target === event.currentTarget) {
+        closeModal();
     }
+}
 
-    function closeModal() {
-        modal.classList.remove('modal--open');
+function closeModalOnKeydownHandler(event) {
+    if (event.code === 'Escape') {
+        closeModal();
     }
+}
+
+export function closeModal() {
+    document.body.removeAttribute(modalOpenAttribute);
+    modalElement.setAttribute('aria-hidden', false);
+
+    modalElement.removeEventListener('click', closeModalOnClickHandler);
+    document.removeEventListener('keydown', closeModalOnKeydownHandler);
+}
+
+export function openModal(modalMode, modalInfo) {
+    modalElement.addEventListener('click', closeModalOnClickHandler);
+    document.addEventListener('keydown', closeModalOnKeydownHandler);
+
+    const scrollHeight = Math.max(
+        document.body.scrollHeight, document.documentElement.scrollHeight,
+        document.body.offsetHeight, document.documentElement.offsetHeight,
+        document.body.clientHeight, document.documentElement.clientHeight
+    );
+    
+    modalElement.setAttribute('aria-hidden', true);
+    modalElement.style.height = `${scrollHeight}px`;
+
+    modalView.setModalMode(modalMode, modalInfo);
+
+    document.body.setAttribute(modalOpenAttribute, true);
+
+    return modalView;
 }
