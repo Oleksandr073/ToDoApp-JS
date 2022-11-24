@@ -6,8 +6,8 @@ class UsersRepository extends BaseRepository {
     }
 
     getOne(search) {
-        const { nickname, email } = search;
-        return super.getOne({ nickname, email });
+        const { nickname } = search;
+        return super.getOne({ nickname });
     }
 
     getById(id) {
