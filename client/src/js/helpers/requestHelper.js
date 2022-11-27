@@ -1,6 +1,7 @@
 import { API_URL } from "../constants/apiUrl";
 import { ACCESS_TOKEN_KEY } from "../constants/localStorageKeys";
 import { userApi } from "../requests/usersRequest"; //------------------//
+import { navigateTo } from "../routers";
 import localStorageHelper from "./localStorageHelper";
 
 let isRepeat = false;
@@ -22,6 +23,8 @@ export default async function makeRequest({ entityName, id = '', method, body, h
     //----------------------// refreshToken is not valid
     if (res.status === 401 && url.includes('refresh')) {
         localStorageHelper.remove(ACCESS_TOKEN_KEY);
+
+        navigateTo(location.origin + '/login');
 
         throw new Error('Please login again!');
     }
