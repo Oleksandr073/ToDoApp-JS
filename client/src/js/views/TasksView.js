@@ -13,6 +13,7 @@ export default class TasksView {
         this.title = 'ToDoApp | Tasks';
 
         this.onSubmitFormHandlerFun = this.onSubmitFormHandler.bind(this);
+        this.onSubmitFormByEnterHandlerFun = this.onSubmitFormByEnterHandler.bind(this);
     }
 
     setTitle() {
@@ -31,17 +32,23 @@ export default class TasksView {
     bindEvents() {
         this.tasksTemplate.eventsInit();
 
-        const { modalCloseButtonElement, tasksAddButtonElement } = this.refs;
+        const { tasksAddButtonElement } = this.refs;
 
-        modalCloseButtonElement.addEventListener('click', closeModal);
-
-        tasksAddButtonElement.addEventListener('click', event => {
+        tasksAddButtonElement.addEventListener('click', () => {
             const modalView = openModal('add');
+           
+            const { formElement, buttons: { modalCloseButtonElement } } = modalView.refs;
 
-            const { formElement } = modalView.refs;
-
+            formElement.addEventListener('keydown', this.onSubmitFormByEnterHandlerFun);
             formElement.addEventListener('submit', this.onSubmitFormHandlerFun);
+            modalCloseButtonElement.addEventListener('click', closeModal);
         });
+    }
+
+    onSubmitFormByEnterHandler(event) {
+        if (event.code === 'Enter' || event.which === 13) {
+            event.preventDefault();
+        }
     }
 
     async onSubmitFormHandler(event) {
@@ -50,13 +57,15 @@ export default class TasksView {
         const formElement = event.currentTarget;
 
         const newTaskInfo = getFormDataHelper(formElement);
-        newTaskInfo.tags = newTaskInfo.tags.split(',');
+        newTaskInfo.tags = newTaskInfo.tags ? newTaskInfo.tags.split(',') : [];
 
         const newTask = this.taskList.newTask(newTaskInfo);
 
         await newTask.postTask();
         
         closeModal();
+        formElement.removeEventListener('keydown', this.onSubmitFormByEnterHandlerFun);
         formElement.removeEventListener('submit', this.onSubmitFormHandlerFun);
     }
+
 }

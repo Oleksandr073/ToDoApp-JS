@@ -135,6 +135,9 @@ export default class TextareaInput {
     #bindEvents() {
         if (!this.#textareaWrapperEl) throw new Error('Element not found on page');
         if (!this.#disabled) {
+            this.#textareaWrapperEl.addEventListener('keydown', event => {
+                event.stopPropagation();
+            });
             this.#textareaWrapperEl.addEventListener('input', this.#setValueIntoTextareaInput.bind(this));
             this.#textareaWrapperEl.addEventListener('input', this.#maskTextareaValue.bind(this));
         }

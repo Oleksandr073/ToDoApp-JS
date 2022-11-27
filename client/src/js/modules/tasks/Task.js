@@ -21,6 +21,7 @@ export default class Task {
         this.id = id;
 
         this.onSubmitFormHandlerFun = this.onSubmitFormHandler.bind(this);
+        this.onSubmitFormByEnterHandlerFun = this.onSubmitFormByEnterHandler.bind(this);
     }
 
     get taskInfo() {
@@ -138,7 +139,14 @@ export default class Task {
         const { formElement, buttons: { modalCloseButtonElement } } = modalView.refs;
 
         modalCloseButtonElement.addEventListener('click', closeModal);
+        formElement.addEventListener('keydown', this.onSubmitFormByEnterHandlerFun);
         formElement.addEventListener('submit', this.onSubmitFormHandlerFun);
+    }
+
+    onSubmitFormByEnterHandler(event) {
+        if (event.code === 'Enter' || event.which === 13) {
+            event.preventDefault();
+        }
     }
 
     async onSubmitFormHandler(event) {
@@ -152,6 +160,7 @@ export default class Task {
         await this.editTask(editTaskInfo);
 
         closeModal();
+        formElement.removeEventListener('keydown', this.onSubmitFormByEnterHandlerFun);
         formElement.removeEventListener('submit', this.onSubmitFormHandlerFun);
     }
 }
