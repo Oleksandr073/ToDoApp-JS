@@ -1,5 +1,5 @@
 import { taskIdAttribute } from "../constants/dataAttributes";
-import { options } from "../constants/dateReadableOptions";
+import { dateReadableFormat } from "../helpers/getDate";
 
 export default function taskItemTemplate({ title, text, tags, isActive, date, id }) {
 
@@ -12,10 +12,12 @@ export default function taskItemTemplate({ title, text, tags, isActive, date, id
             <h3 class="tasks__title" translate="no">${title}</h3>
             <p class="tasks__text" translate="no">${text}</p>
         </div>
-        <ul class="tasks__tags tags">
+        ${tags.length ? 
+        `<ul class="tasks__tags tags">
             ${tags.map(tag => `<li class="tasks__tag tags__item">#${tag}</li>`).join('')}
-        </ul>
-        <time class="tasks__date">${new Date(date).toLocaleString('en-US', options)}</time>
+        </ul>`
+        : ''}
+        <time class="tasks__date">${dateReadableFormat(date)}</time>
         <label class="tasks__check ${!isActive ? 'tasks__check--checked' : ''}" title="complete the task">
             <input class="tasks__check-box" ${!isActive ? 'checked': ''} type="checkbox" name="task-checked">
             <svg class="tasks__check-icon">
