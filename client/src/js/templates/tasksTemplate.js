@@ -3,7 +3,7 @@ import TagsInput from "../modules/inputs/tags/TagsInput";
 import SelectInput from "../modules/inputs/SelectInput";
 import DateInput from "../modules/inputs/DateInput";
 
-export default function tasksTemplate(isAuth) { 
+export default function tasksTemplate() { 
 
     const tasksElement = document.createElement('section');
     tasksElement.classList.add('tasks', 'section');
@@ -161,6 +161,9 @@ function searchForm(formElement) {
     const searchWrapper = searchForm.querySelector('.search__wrapper');
     const searchInner = searchForm.querySelector('.search__inner');
 
+    searchOpenButton.setAttribute('aria-expanded', false);
+    searchWrapper.setAttribute('aria-hidden', true);
+
     searchOpenButton.addEventListener('click', () => {
         const searchInnerHeight = searchInner.getBoundingClientRect().height;
 
@@ -171,12 +174,18 @@ function searchForm(formElement) {
         if (searchForm.classList.contains('search--open')) {
             setTimeout(() => {
                 if (searchForm.classList.contains('search--open')) {
+                    searchOpenButton.setAttribute('aria-expanded', true);
+                    searchWrapper.setAttribute('aria-hidden', false);
+
                     searchWrapper.style.height = 'auto';
                 }
             }, 400);
         } else {
             setTimeout(() => {
                 if (!searchForm.classList.contains('search--open')) {
+                    searchOpenButton.setAttribute('aria-expanded', false);
+                    searchWrapper.setAttribute('aria-hidden', true);
+
                     searchWrapper.style.height = 0;
                 }
             }, 0);
