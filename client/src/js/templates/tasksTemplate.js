@@ -1,8 +1,3 @@
-import TextareaInput from "../modules/inputs/TextareaInput";
-import TagsInput from "../modules/inputs/tags/TagsInput";
-import SelectInput from "../modules/inputs/SelectInput";
-import DateInput from "../modules/inputs/DateInput";
-
 export default function tasksTemplate() { 
 
     const tasksElement = document.createElement('section');
@@ -81,6 +76,9 @@ export default function tasksTemplate() {
     const dateInputDateToElement = tasksElement.querySelector('.date-input-js[name="date-to"]');
     const tasksListElement = tasksElement.querySelector('.tasks__list');
     const tasksAddButtonElement = tasksElement.querySelector('.tasks__add-button');
+    const searchOpenButtonElement = formElement.querySelector('.search__open-button');
+    const searchWrapperElement = formElement.querySelector('.search__wrapper');
+    const searchInnerElement = formElement.querySelector('.search__inner');
 
     const refs = {
         tasksListElement,
@@ -94,101 +92,15 @@ export default function tasksTemplate() {
             dateInputDateToElement,
         },
         tasksAddButtonElement,
+        searchElements: {
+            searchOpenButtonElement,
+            searchWrapperElement,
+            searchInnerElement,
+        }
     };
 
     return {
         tasksElement,
         refs,
-        eventsInit() {
-            bindEvents(this.refs);
-        },
     };
-}
-
-function bindEvents({
-    formElement,
-    inputs: {
-        textareaInputElement,
-        tagsInputElement,
-        selectInputByDateElement,
-        selectInputByActiveElement,
-        dateInputDateFromElement,
-        dateInputDateToElement,
-    },
-}) {
-
-    searchForm(formElement);
-
-    new TextareaInput({
-        textareaInputElement,
-        labelElement: textareaInputElement.closest('.search__label'),
-        formElement,
-        maxCharactersAmount: 200,
-        columnsAmount: {
-            992: 10,
-            768: 7,
-            576: 4,
-        },
-    });
-
-    new TagsInput({
-        tagsInputElement,
-        labelElement: tagsInputElement.closest('.search__label'),
-        formElement,
-    });
-
-    [selectInputByDateElement, selectInputByActiveElement].forEach(selectInputElement => {
-        new SelectInput({
-            selectInputElement,
-            labelElement: selectInputElement.closest('.search__filter'),
-            formElement,
-        });
-    });
-
-    [dateInputDateFromElement, dateInputDateToElement].forEach(dateInputElement => {
-        new DateInput({
-            dateInputElement,
-            labelElement: dateInputElement.closest('.search__filter'),
-            formElement,
-        });
-    });
-
-}
-
-function searchForm(formElement) {
-    const searchForm = formElement;
-    const searchOpenButton = searchForm.querySelector('.search__open-button');
-    const searchWrapper = searchForm.querySelector('.search__wrapper');
-    const searchInner = searchForm.querySelector('.search__inner');
-
-    searchOpenButton.setAttribute('aria-expanded', false);
-    searchWrapper.setAttribute('aria-hidden', true);
-
-    searchOpenButton.addEventListener('click', () => {
-        const searchInnerHeight = searchInner.getBoundingClientRect().height;
-
-        searchForm.classList.toggle('search--open');
-
-        searchWrapper.style.height = searchInnerHeight + 'px';
-
-        if (searchForm.classList.contains('search--open')) {
-            setTimeout(() => {
-                if (searchForm.classList.contains('search--open')) {
-                    searchOpenButton.setAttribute('aria-expanded', true);
-                    searchWrapper.setAttribute('aria-hidden', false);
-
-                    searchWrapper.style.height = 'auto';
-                }
-            }, 400);
-        } else {
-            setTimeout(() => {
-                if (!searchForm.classList.contains('search--open')) {
-                    searchOpenButton.setAttribute('aria-expanded', false);
-                    searchWrapper.setAttribute('aria-hidden', true);
-
-                    searchWrapper.style.height = 0;
-                }
-            }, 0);
-        }
-    })
 }
