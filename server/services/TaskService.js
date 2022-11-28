@@ -1,4 +1,5 @@
 import TasksRepository from '../repositories/TasksRepository.js';
+import getNewDateInJSON from '../helpers/getNewDateInJSON.js';
 
 class TaskService {
     getAll(userId) {
@@ -10,6 +11,7 @@ class TaskService {
     }
 
     create(userId, body) {
+        body.date = getNewDateInJSON();
         const task = TasksRepository.create(userId, body);
         if (!task) {
             throw ApiError.BadRequest('Failed to create task');

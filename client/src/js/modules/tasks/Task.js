@@ -5,7 +5,7 @@ import { closeModal, openModal } from '../modal';
 import getFormDataHelper from '../../helpers/getFormDataHelper';
 
 export default class Task {
-    constructor({ taskList, title, text, tags = [], isActive = true, date = new Date().toJSON().replace(/:\d\d\..+$/, '') + 'Z', id }) {
+    constructor({ taskList, title, text, tags = [], isActive = true, date, id }) {
         this.taskList = taskList;
         this.taskListElement = taskList.taskListElement;
 
@@ -31,9 +31,10 @@ export default class Task {
 
     async postTask() { // post request
         try {
-            const { id } = await taskApi.createTask(this.taskInfo);
+            const { id, date } = await taskApi.createTask(this.taskInfo);
 
             this.id = id;
+            this.date = date;
 
             this.taskList.postTaskInTaskList(this);
         } catch (error) {
