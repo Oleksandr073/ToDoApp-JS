@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import ApiError from '../helpers/ApiError.js';
 import UsersRepository from '../repositories/UsersRepository.js';
 import TokenService from './TokenService.js';
+import getNewDateInJSON from '../helpers/getNewDateInJSON.js';
 
 class UserService {
     async register(body) {
@@ -12,6 +13,8 @@ class UserService {
 
         const hashPassword = await bcrypt.hash(body.password, 3);
         body.password = hashPassword;
+
+        body.registrationDate = getNewDateInJSON();
 
         const user = UsersRepository.create(body);
 

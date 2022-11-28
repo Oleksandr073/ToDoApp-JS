@@ -3,6 +3,19 @@ import makeRequest from '../helpers/requestHelper';
 import { USERS_ENTITY } from '../constants/entities';
 import { ACCESS_TOKEN_KEY } from '../constants/localStorageKeys';
 import { USER_ID_KEY } from '../constants/localStorageKeys';
+import { REGISTRATION_DATE_KEY } from '../constants/localStorageKeys';
+
+function setUserInfo({ user, accessToken }) {
+    localStorageHelper.set(ACCESS_TOKEN_KEY, accessToken);
+    localStorageHelper.set(USER_ID_KEY, user.id);
+    localStorageHelper.set(REGISTRATION_DATE_KEY, user.registrationDate);
+}
+
+function removeUserInfo() {
+    localStorageHelper.remove(ACCESS_TOKEN_KEY);
+    localStorageHelper.remove(USER_ID_KEY);
+    localStorageHelper.remove(REGISTRATION_DATE_KEY);
+}
 
 export const userApi = {
     async registerUser(data) {
@@ -13,8 +26,7 @@ export const userApi = {
                 method: 'POST',
             });
 
-            localStorageHelper.set(ACCESS_TOKEN_KEY, accessToken);
-            localStorageHelper.set(USER_ID_KEY, user.id);
+            setUserInfo({ user, accessToken });
 
             return user;
         } catch (error) {
@@ -30,8 +42,7 @@ export const userApi = {
                 method: 'POST',
             });
 
-            localStorageHelper.set(ACCESS_TOKEN_KEY, accessToken);
-            localStorageHelper.set(USER_ID_KEY, user.id);
+            setUserInfo({ user, accessToken });
 
             return user;
         } catch (error) {
@@ -46,8 +57,7 @@ export const userApi = {
                 method: 'GET',
             });
 
-            localStorageHelper.remove(ACCESS_TOKEN_KEY);
-            localStorageHelper.remove(USER_ID_KEY);
+            removeUserInfo();
 
             return response;
         } catch (error) {
@@ -76,8 +86,7 @@ export const userApi = {
                 method: 'GET',
             });
 
-            localStorageHelper.set(ACCESS_TOKEN_KEY, accessToken);
-            localStorageHelper.set(USER_ID_KEY, user.id);
+            setUserInfo({ user, accessToken });
 
             return user;
         } catch (error) {
