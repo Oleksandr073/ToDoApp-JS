@@ -8,6 +8,7 @@ export default class TagsInput {
     #formEl;
     #tags;
     #disabled;
+    #onInputCallback
 
     constructor({ tagsInputElement, labelElement, formElement, disabled = false }) {
         this.#inputSendEl = tagsInputElement;
@@ -16,6 +17,7 @@ export default class TagsInput {
         this.#tagsWrapperEl = null;
         this.#tagsInputEl = null;
         this.#disabled = disabled;
+        this.#onInputCallback = null;
 
         this.#createElements();
 
@@ -56,8 +58,8 @@ export default class TagsInput {
         return this.#disabled;
     }
 
-    formReset() {
-        this.#tags.removeAllTags();
+    get onInputCallback() {
+        return this.#onInputCallback;
     }
 
     #createElements() {
@@ -111,6 +113,10 @@ export default class TagsInput {
         this.#labelEl?.addEventListener('click', this.#inputFocus.bind(this));
     }
 
+    formReset() {
+        this.#tags.removeAllTags();
+    }
+
     #inputFocus(event) {
         // if (event.target !== event.currentTarget) return;
         this.#tagsInputEl.focus();
@@ -126,13 +132,14 @@ export default class TagsInput {
 
     #updateInputSendValue() {
         this.#inputSendEl.value = [...this.tagsValues].join(',');
+
+        if (!this.#onInputCallback) return;
+        this.#onInputCallback();
     }
 
     #addTagOnInput() {
         this.#tags.addTag(this.#tagsInputEl.value);
         this.#tagsInputEl.value = '';
-
-        this.#updateInputSendValue();
     }
 
     #onInputKeydown(event) {
@@ -154,6 +161,10 @@ export default class TagsInput {
             value = value.slice(0, maxLength);
         }
         this.#tagsInputEl.value = value;
+    }
+
+    onInput(onInputCallback) {
+        this.#onInputCallback = onInputCallback;
     }
 
 }

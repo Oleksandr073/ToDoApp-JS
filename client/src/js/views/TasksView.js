@@ -6,6 +6,9 @@ import TextareaInput from "../modules/inputs/TextareaInput";
 import TagsInput from "../modules/inputs/tags/TagsInput";
 import SelectInput from "../modules/inputs/SelectInput";
 import DateInput from "../modules/inputs/DateInput";
+import { REGISTRATION_DATE_KEY } from "../constants/localStorageKeys";
+import localStorageHelper from "../helpers/localStorageHelper";
+import { dateWithoutTimeInputValueFormat } from "../helpers/getDate";
 
 export default class TasksView {
     constructor() {
@@ -47,9 +50,12 @@ export default class TasksView {
                 dateInputDateToElement,
             },
             tasksAddButtonElement,
-        } = this.refs;        
+        } = this.refs;    
+        
+        const onInputCallback = this.searchTasksRequestHandler.bind(this);
 
-        new TextareaInput({
+        // textarea input
+        const textareaInput = new TextareaInput({
             textareaInputElement,
             labelElement: textareaInputElement.closest('.search__label'),
             formElement,
@@ -61,27 +67,68 @@ export default class TasksView {
             },
         });
 
-        new TagsInput({
+        textareaInput.onInput(onInputCallback);
+
+        // tags input
+        const tagsInput = new TagsInput({
             tagsInputElement,
             labelElement: tagsInputElement.closest('.search__label'),
             formElement,
         });
 
-        [selectInputByDateElement, selectInputByActiveElement].forEach(selectInputElement => {
-            new SelectInput({
-                selectInputElement,
-                labelElement: selectInputElement.closest('.search__filter'),
-                formElement,
-            });
+        tagsInput.onInput(onInputCallback);
+
+        // select inputs
+        const selectInputByDate = new SelectInput({
+            selectInputElement: selectInputByDateElement,
+            labelElement: selectInputByDateElement.closest('.search__filter'),
+            formElement,
         });
 
-        [dateInputDateFromElement, dateInputDateToElement].forEach(dateInputElement => {
-            new DateInput({
-                dateInputElement,
-                labelElement: dateInputElement.closest('.search__filter'),
-                formElement,
-            });
+        selectInputByDate.onInput(onInputCallback);
+
+        const selectInputByActive = new SelectInput({
+            selectInputElement: selectInputByActiveElement,
+            labelElement: selectInputByActiveElement.closest('.search__filter'),
+            formElement,
         });
+
+        selectInputByActive.onInput(onInputCallback);
+
+        // date inputs
+        const dateInputDateFrom = new DateInput({
+            dateInputElement: dateInputDateFromElement,
+            labelElement: dateInputDateFromElement.closest('.search__filter'),
+            formElement,
+        });
+
+        const dateInputDateTo = new DateInput({
+            dateInputElement: dateInputDateToElement,
+            labelElement: dateInputDateToElement.closest('.search__filter'),
+            formElement,
+        });
+
+        dateInputDateFrom.onInput(() => {
+            dateInputDateTo.min = dateInputDateFrom.value;
+            onInputCallback();
+        });
+
+        dateInputDateTo.onInput(() => {
+            dateInputDateFrom.max = dateInputDateTo.value;
+            onInputCallback();
+        });
+
+        this.setCurrentDate(dateInputDateFrom, dateInputDateTo);
+    
+        // form
+        formElement.addEventListener('reset', event => { 
+            event.preventDefault();
+
+            this.setCurrentDate(dateInputDateFrom, dateInputDateTo);
+
+            onInputCallback();
+        });
+        
 
         tasksAddButtonElement.addEventListener('click', () => {
             const modalView = openModal('add');
@@ -92,6 +139,14 @@ export default class TasksView {
             formElement.addEventListener('submit', this.onSubmitFormHandlerFun);
             modalCloseButtonElement.addEventListener('click', closeModal);
         });
+    }
+
+    searchTasksRequestHandler() {
+        const searchFormData = getFormDataHelper(this.refs.formElement);
+
+        console.log(searchFormData);
+
+        this.taskList.getFilteredTasks(searchFormData);
     }
 
     onSubmitFormByEnterHandler(event) {
@@ -115,6 +170,18 @@ export default class TasksView {
         closeModal();
         formElement.removeEventListener('keydown', this.onSubmitFormByEnterHandlerFun);
         formElement.removeEventListener('submit', this.onSubmitFormHandlerFun);
+    }
+
+    setCurrentDate(dateInputDateFrom, dateInputDateTo) {
+        const dateFromValue = dateWithoutTimeInputValueFormat(localStorageHelper.get(REGISTRATION_DATE_KEY));
+
+        dateInputDateFrom.min = dateFromValue;
+        dateInputDateFrom.max = dateWithoutTimeInputValueFormat();
+        dateInputDateFrom.value = dateInputDateFrom.min;
+
+        dateInputDateTo.min = dateFromValue;
+        dateInputDateTo.max = dateWithoutTimeInputValueFormat();
+        dateInputDateTo.value = dateInputDateTo.max;
     }
 
     searchFormInit() {

@@ -3,12 +3,14 @@ export default class SelectInput {
     #labelEl;
     #formEl;
     #selectWrapperEl;
+    #onInputCallback;
 
-    constructor({ selectInputElement, labelElement, formElement}) {
+    constructor({ selectInputElement, labelElement, formElement }) {
         this.#selectInputEl = selectInputElement;
         this.#labelEl = labelElement;
         this.#formEl = formElement;
         this.#selectWrapperEl = null;
+        this.#onInputCallback = null;
 
         this.#createElements();
         // this.#bindEvents();
@@ -54,6 +56,10 @@ export default class SelectInput {
                 styledSelect.textContent = li.textContent;
 
                 select.value = options[i].value;
+                
+                if (this.#onInputCallback) {
+                    this.#onInputCallback();
+                };
 
                 list.classList.remove('select__options--active');
                 document.removeEventListener('click', fun);
@@ -82,6 +88,10 @@ export default class SelectInput {
         list.append(...liElements);
         div.append(list);
         this.#selectInputEl.replaceWith(div);
+    }
+
+    onInput(onInputCallback) {
+        this.#onInputCallback = onInputCallback;
     }
 
     // #bindEvents() {

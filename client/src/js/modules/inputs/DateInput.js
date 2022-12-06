@@ -1,14 +1,18 @@
+import { dateWithoutTimeReadableFormat, dateWithoutTimeInputValueFormat } from "../../helpers/getDate";
+
 export default class DateInput {
     #dateInputEl;
     #labelEl;
     #formEl;
     #dateWrapperEl;
+    #onInputCallback;
 
     constructor({ dateInputElement, formElement, labelElement }) {
         this.#dateInputEl = dateInputElement;
         this.#labelEl = labelElement;
         this.#formEl = formElement;
         this.#dateWrapperEl = null;
+        this.#onInputCallback = null;
 
         this.#createElements();
         this.#bindEvents();
@@ -24,6 +28,10 @@ export default class DateInput {
 
     get formElement() {
         return this.#formEl;
+    }
+
+    get onInputCallback() {
+        return this.#onInputCallback;
     }
 
     get value() {
@@ -45,7 +53,7 @@ export default class DateInput {
     }
 
     get max() {
-        return this.#dateInputEl.value;
+        return this.#dateInputEl.max;
     }
 
     set max(newMaxValue) {
@@ -78,12 +86,17 @@ export default class DateInput {
 
         this.#dateWrapperEl = dateWrapperEl;
 
-        this.value = this.#convertDateValueForShow(); // default value
+        // this.value = dateWithoutTimeInputValueFormat(); // default value
     }
 
     #bindEvents() {
         if (!this.#dateWrapperEl) throw new Error('Element not found on page');
-        this.#dateInputEl.addEventListener('input', this.#setValueIntoDateWrapper.bind(this));
+        this.#dateInputEl.addEventListener('input', () => {
+            this.#setValueIntoDateWrapper();
+
+            if (!this.#onInputCallback) return;
+            this.#onInputCallback();
+        });
         this.#dateWrapperEl.addEventListener('click', this.#showDateInputPicker.bind(this));
 
         // this.#labelEl?.addEventListener('click', this.#dateInputFocus.bind(this));
@@ -91,28 +104,7 @@ export default class DateInput {
     }
 
     #setValueIntoDateWrapper() {
-        this.#dateWrapperEl.textContent = this.#convertDateValueForRender(this.#dateInputEl.value);
-    }
-
-    #convertDateValueForRender(value) {
-        const { year, month, day } = this.#getDateProperties(value);
-        return `${day}.${month}.${year}`;
-    }
-
-    #convertDateValueForShow(value) {
-        const { year, month, day } = this.#getDateProperties(value);
-        return `${year}-${month}-${day}`;
-    }
-
-    #getDateProperties(value) {
-        const date = value ? new Date(value) : new Date();
-        const year = date.getFullYear();
-        let month = date.getMonth() + 1;
-        month = month < 10 ? '0' + month : month;
-        let day = date.getDate();
-        day = day < 10 ? '0' + day : day;
-
-        return { year, month, day };
+        this.#dateWrapperEl.textContent = dateWithoutTimeReadableFormat(this.#dateInputEl.value);
     }
 
     #showDateInputPicker() {
@@ -128,7 +120,11 @@ export default class DateInput {
     // }
 
     formReset() {
-        this.value = this.#convertDateValueForShow(); // default value
+        // this.value = dateWithoutTimeInputValueFormat(); // default value
+    }
+
+    onInput(onInputCallback) {
+        this.#onInputCallback = onInputCallback;
     }
 
 }

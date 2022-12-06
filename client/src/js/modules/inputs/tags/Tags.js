@@ -64,16 +64,11 @@ export default class Tags {
         const lastTag = this.#allTags[this.#allTags.length - 1];
         if (!lastTag) return;
         lastTag.removeTag();
-        this.#removeTagFromTags(lastTag.value);
-
-        this.#updateInputSendValue();
     }
 
     removeAllTags() {
         this.#allTags.forEach(tag => tag.removeTag());
         this.#allTags.length = 0;
         this.#tagsValues.clear();
-
-        this.#updateInputSendValue();
     }
 }

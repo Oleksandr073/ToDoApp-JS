@@ -6,6 +6,7 @@ export default class TextareaInput {
     #columnsAmount;
     #maxCharactersAmount;
     #disabled;
+    #onInputCallback
 
     constructor({ textareaInputElement, labelElement, formElement, columnsAmount = 10, maxCharactersAmount = 200, disabled = false }) {
         this.#textareaInputEl = textareaInputElement;
@@ -15,6 +16,7 @@ export default class TextareaInput {
         this.#columnsAmount = columnsAmount;
         this.#maxCharactersAmount = maxCharactersAmount;
         this.#disabled = disabled;
+        this.#onInputCallback = null;
 
         this.#createElements();
         this.#bindEvents();
@@ -46,6 +48,10 @@ export default class TextareaInput {
 
     get disabled() {
         return this.#disabled;
+    }
+
+    get onInputCallback() {
+        return this.#onInputCallback;
     }
 
     get value() {
@@ -161,6 +167,9 @@ export default class TextareaInput {
 
     #setValueIntoTextareaInput() {
         this.#textareaInputEl.value = this.#textareaWrapperEl.innerText;
+
+        if (!this.#onInputCallback) return;
+        this.#onInputCallback();
     }
 
     #textareaInputFocus() {
@@ -170,5 +179,9 @@ export default class TextareaInput {
     formReset() {
         this.#textareaInputEl.value = '';
         this.#textareaWrapperEl.innerText = '';
+    }
+
+    onInput(onInputCallback) {
+        this.#onInputCallback = onInputCallback;
     }
 }
