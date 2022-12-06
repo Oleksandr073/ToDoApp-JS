@@ -1,5 +1,5 @@
 export function getDateParams(date) {
-    date = new Date(date);
+    date = date ? new Date(date) : new Date();
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
     let day = date.getDate();
@@ -20,4 +20,14 @@ export function dateReadableFormat(date) {
 export function dateInputValueFormat(date) {
     const { year, month, day, hours, minutes } = getDateParams(date);
     return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+export function dateWithoutTimeReadableFormat(date) {
+    const { year, month, day } = getDateParams(date);
+    return `${day}.${month}.${year}`;
+}
+
+export function dateWithoutTimeInputValueFormat(date) {
+    const { year, month, day } = getDateParams(date);
+    return `${year}-${month}-${day}`;
 }
