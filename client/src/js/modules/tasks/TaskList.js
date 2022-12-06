@@ -1,5 +1,6 @@
 import Task from './Task.js';
 import { taskApi } from '../../requests/tasksRequest';
+import { dateWithoutTimeInputValueFormat } from '../../helpers/getDate.js';
 
 export default class TaskList {
     constructor(tasksListElement) {
@@ -8,39 +9,30 @@ export default class TaskList {
         this.taskListElement = tasksListElement;
     }
 
-    getFilteredTasks({ search: searchText, 'active-filter': activeFilter, 'date-filter': dateFilter, 'date-range-from': dateFrom, 'date-range-to': dateTo, priority }) {
+    getFilteredTasks({ text: searchText, 'by-active': activeFilter, 'by-date': dateFilter, 'date-from': dateFrom, 'date-to': dateTo }) {
         let arr = [];
 
         // searchText
         arr = this.allTasks.filter(({ title, text }) => title.includes(searchText) || text.includes(searchText));
 
         // dateFrom, dateTo
-        arr = arr.filter(({ date }) => new Date(date) >= new Date(dateFrom) && new Date(date) <= new Date(dateTo));
+        arr = arr.filter(({ date }) => new Date(dateWithoutTimeInputValueFormat(date)) >= new Date(dateFrom) && new Date(dateWithoutTimeInputValueFormat(date)) <= new Date(dateTo));
         
         // activeFilter
         
         arr = arr.filter(({ isActive }) => {
-            if (activeFilter == 'active') return !isActive;
-            if (activeFilter == 'inactive') return isActive;
+            if (activeFilter === 'active') return !isActive;
+            if (activeFilter === 'inactive') return isActive;
             return true;
         });
 
         // priority, dateFilter
         arr.sort((a, b) => {
-            if (priority == 'ask') {
-                if (priority != 'none' && a.priority < b.priority) return -1;
-                if (priority != 'none' && a.priority > b.priority) return 1;
-            }
-            if (priority == 'desk') {
-                if (priority != 'none' && a.priority > b.priority) return -1;
-                if (priority != 'none' && a.priority < b.priority) return 1;
-            }
-
-            if (dateFilter == 'new-first') {
+            if (dateFilter === 'newest-first') {
                 if (new Date(a.date) < new Date(b.date)) return -1;
                 if (new Date(a.date) > new Date(b.date)) return 1;
             } 
-            if (dateFilter == 'old-first') {
+            if (dateFilter === 'oldest-first') {
                 if (new Date(a.date) > new Date(b.date)) return -1;
                 if (new Date(a.date) < new Date(b.date)) return 1;
             } 
