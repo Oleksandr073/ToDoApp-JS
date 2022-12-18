@@ -2,6 +2,7 @@ import registerTemplate from "../templates/registerTemplate";
 import getFormDataHelper from "../helpers/getFormDataHelper";
 import { userApi } from "../requests/usersRequest";
 import { navigateTo } from "../routers/index";
+import Notification from "../modules/Notification";
 
 export default class RegisterView {
     constructor() {
@@ -41,7 +42,19 @@ export default class RegisterView {
 
             const url = location.origin + '/tasks';
             navigateTo(url);
+
+            new Notification({
+                message: 'Registration is succesfull!',
+                type: 'success',
+                category: 'user',
+            });
         } catch (error) {
+            new Notification({
+                message: 'Registration error',
+                type: 'error',
+                category: 'user',
+            });
+
             alert(error.message);
         }
        

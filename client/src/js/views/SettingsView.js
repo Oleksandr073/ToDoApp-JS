@@ -3,6 +3,7 @@ import getFormDataHelper from "../helpers/getFormDataHelper";
 import { userApi } from "../requests/usersRequest";
 import { USER_ID_KEY } from '../constants/localStorageKeys';
 import localStorageHelper from '../helpers/localStorageHelper';
+import Notification from "../modules/Notification";
 
 export default class SettingsView {
     constructor() {
@@ -55,7 +56,18 @@ export default class SettingsView {
 
             formElement.reset();
 
+            new Notification({
+                message: 'Password changed successfully!',
+                type: 'success',
+                category: 'user',
+            });
         } catch (error) {
+            new Notification({
+                message: 'Error changing password',
+                type: 'error',
+                category: 'user',
+            });
+
             alert(error.message);
         }
     }

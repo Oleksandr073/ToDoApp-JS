@@ -2,6 +2,7 @@ import loginTemplate from "../templates/loginTemplate";
 import getFormDataHelper from "../helpers/getFormDataHelper";
 import { userApi } from "../requests/usersRequest";
 import { navigateTo } from "../routers/index";
+import Notification from "../modules/Notification";
 
 export default class LoginView {
     constructor() {
@@ -35,7 +36,19 @@ export default class LoginView {
 
             const url = location.origin + '/tasks';
             navigateTo(url);
+
+            new Notification({
+                message: 'Login is succesfull!',
+                type: 'success',
+                category: 'authentication',
+            });
         } catch (error) {
+            new Notification({
+                message: 'Login error',
+                type: 'error',
+                category: 'authentication',
+            });
+
             alert(error.message);
         }
 

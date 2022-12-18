@@ -3,6 +3,7 @@ import taskItemTemplate from '../../templates/taskItemTemplate';
 import { taskIdAttribute } from '../../constants/dataAttributes';
 import { closeModal, openModal } from '../modal';
 import getFormDataHelper from '../../helpers/getFormDataHelper';
+import Notification from '../Notification';
 
 export default class Task {
     constructor({ taskList, title, text, tags = [], isActive = true, date, id }) {
@@ -37,7 +38,19 @@ export default class Task {
             this.date = date;
 
             this.taskList.postTaskInTaskList(this);
+
+            new Notification({
+                message: 'Task added successfully!',
+                type: 'success',
+                category: 'tasks',
+            });
         } catch (error) {
+            new Notification({
+                message: 'Error adding task',
+                type: 'error',
+                category: 'tasks',
+            });
+
             alert(error);
         }
     }
@@ -50,7 +63,19 @@ export default class Task {
             taskElement.remove();
 
             this.taskList.deleteTaskInTaskList(this.id);
+
+            new Notification({
+                message: 'Task delited successfully!',
+                type: 'success',
+                category: 'tasks',
+            });
         } catch (error) {
+            new Notification({
+                message: 'Error deliting task',
+                type: 'error',
+                category: 'tasks',
+            });
+
             alert(error);
         }
     }
@@ -66,7 +91,19 @@ export default class Task {
 
         try {
             await this.updateTask();
+
+            new Notification({
+                message: 'Task edited successfully!',
+                type: 'success',
+                category: 'tasks',
+            });
         } catch (error) {
+            new Notification({
+                message: 'Error editing task',
+                type: 'error',
+                category: 'tasks',
+            });
+
             alert('cannot edit the task');
         }
 
@@ -82,7 +119,19 @@ export default class Task {
 
         try {
             await this.updateTask();
+
+            new Notification({
+                message: 'Task completed successfully!',
+                type: 'success',
+                category: 'tasks',
+            });
         } catch (error) {
+            new Notification({
+                message: 'Error completing task',
+                type: 'error',
+                category: 'tasks',
+            });
+
             alert('cannot complete the task');
         }
 

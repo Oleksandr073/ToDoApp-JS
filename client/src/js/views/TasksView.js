@@ -9,6 +9,7 @@ import DateInput from "../modules/inputs/DateInput";
 import { REGISTRATION_DATE_KEY } from "../constants/localStorageKeys";
 import localStorageHelper from "../helpers/localStorageHelper";
 import { dateWithoutTimeInputValueFormat } from "../helpers/getDate";
+import Notification from "../modules/Notification";
 
 export default class TasksView {
     constructor() {
@@ -165,11 +166,16 @@ export default class TasksView {
 
         const newTask = this.taskList.newTask(newTaskInfo);
 
-        await newTask.postTask();
+        try {
+            await newTask.postTask();
+
+            closeModal();
+            formElement.removeEventListener('keydown', this.onSubmitFormByEnterHandlerFun);
+            formElement.removeEventListener('submit', this.onSubmitFormHandlerFun);
+        } catch (error) {
+            alert(error.message)
+        }
         
-        closeModal();
-        formElement.removeEventListener('keydown', this.onSubmitFormByEnterHandlerFun);
-        formElement.removeEventListener('submit', this.onSubmitFormHandlerFun);
     }
 
     setCurrentDate(dateInputDateFrom, dateInputDateTo) {
