@@ -1,4 +1,5 @@
-import { APP_ELEMENT } from "../constants/elements";
+import { APP_ELEMENT, NOTIFICATIONS_ELEMENT } from "../constants/elements";
+import notificationsView from "../views/NotificationsView";
 import HeaderView from "../views/HeaderView";
 import RegisterView from "../views/RegisterView";
 import LoginView from "../views/LoginView";
@@ -14,6 +15,8 @@ class FinalPage {
     constructor() {
         this.mainElement = null;
         this.headerElement = null;
+
+        this.renderNotificationsElement();
     }
 
     renderMainElement(innerElement) {
@@ -47,6 +50,19 @@ class FinalPage {
 
         headerView.bindEvents();
     } 
+
+    renderNotificationsElement() {
+        const isRenderedNotificationsElement = NOTIFICATIONS_ELEMENT.innerHTML;
+
+        if (isRenderedNotificationsElement) {
+            return;
+        }
+
+        const notificationsElement = notificationsView.createNotificationsElement();
+        notificationsView.bindEvents();
+
+        NOTIFICATIONS_ELEMENT.append(notificationsElement);
+    }
     
 
     renderRegisterPage() {
