@@ -1,4 +1,6 @@
 .notifications {
+    width: 330px;
+
     position: fixed;
     top: 100px;
     right: 15px;
@@ -12,14 +14,6 @@
         right: 50%;
 
         transform: translate(50%, 0);
-    }
-
-    // .notifications__list
-
-    &__list {
-        width: 330px;
-
-        position: relative;
     }
 
     // .notifications__item
