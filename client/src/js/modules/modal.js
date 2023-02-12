@@ -15,9 +15,17 @@ function closeModalOnKeydownHandler(event) {
     }
 }
 
+function titleInputFocus(modalMode) {
+    if (modalMode === 'add' || modalMode === 'edit') {
+        const titleInputElement = modalView.refs.inputs.titleInputElement;
+        titleInputElement.focus();
+        titleInputElement.selectionStart = titleInputElement.value.length;
+    }
+}
+
 export function closeModal() {
     document.body.removeAttribute(modalOpenAttribute);
-    modalElement.setAttribute('aria-hidden', false);
+    modalElement.setAttribute('aria-hidden', true);
 
     modalElement.removeEventListener('click', closeModalOnClickHandler);
     document.removeEventListener('keydown', closeModalOnKeydownHandler);
@@ -26,6 +34,9 @@ export function closeModal() {
 export function openModal(modalMode, modalInfo) {
     modalElement.addEventListener('click', closeModalOnClickHandler);
     document.addEventListener('keydown', closeModalOnKeydownHandler);
+    modalElement.addEventListener('transitionend', () => {
+        titleInputFocus(modalMode);
+    }, { once: true });
 
     const scrollHeight = Math.max(
         document.body.scrollHeight, document.documentElement.scrollHeight,
@@ -33,7 +44,7 @@ export function openModal(modalMode, modalInfo) {
         document.body.clientHeight, document.documentElement.clientHeight
     );
     
-    modalElement.setAttribute('aria-hidden', true);
+    modalElement.setAttribute('aria-hidden', false);
     modalElement.style.height = `${scrollHeight}px`;
 
     modalView.setModalMode(modalMode, modalInfo);

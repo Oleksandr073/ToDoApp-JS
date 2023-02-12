@@ -75,11 +75,13 @@ function setMode(refs, modalMode, { title, text, tags } = {}) {
         })()}
         </div> `;
     
+    const titleInputElement = refs.formElement.querySelector('[name="title"]');
     const textareaInputElement = refs.formElement.querySelector('.textarea-input-js');
     const tagsInputElement = refs.formElement.querySelector('.form__tags');
     const modalCloseButtonElement = refs.formElement.querySelector('.modal__button[type="button"]');
     
     refs.inputs = {
+        titleInputElement,
         textareaInputElement,
         tagsInputElement,
     };
